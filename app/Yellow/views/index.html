@@ -1,13 +1,22 @@
-<div ng-controller="IndexController">
 
+
+<div ng-controller="IndexController">
   <super-navbar>
     <super-navbar-title>
-      Index
+      Home
     </super-navbar-title>
   </super-navbar>
 
-  <div class="padding">
-    <h1>Pow! Here's your fresh module!</h1>
-  </div>
+  <div class = "welcome">
+  	<h2 class = "purple-text center"> WELCOME</h2> 
+  	<h2 class = "purple-text center">TO </h2> 
+  	<h1 class = "center">IckyPicky!! </h1>
+	</div>
 
+
+  <super-navigate view-id = "Yellow#game" class="startbutton">
+	  <button class = "button" id = "startgame"> 
+  		START GAME!
+  	</button>
+  </super-navigate>
 </div>

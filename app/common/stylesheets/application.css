@@ -1,5 +1,17 @@
 .supersonic-navbar-mock {
-  background-color: #00B5FF !important;
+  background-color: #0B610B !important;
   text-align: center;
   font-weight: 600;
+}
+
+body {
+	background-color: #ffffff;
+}
+
+.purple-text {
+	color: #703787;
+}
+
+.center {
+	text-align: center;
 }
