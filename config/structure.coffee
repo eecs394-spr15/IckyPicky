@@ -22,7 +22,7 @@ module.exports =
   #]
 
   rootView:  
-     location: "Yellow#game"
+     location: "Yellow#Yellow"
      
   
   preloads: [
