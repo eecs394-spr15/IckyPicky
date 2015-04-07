@@ -39,7 +39,10 @@
       faceRate: 1,
       fingerPos: 400,
       fingerRate: 5,
+      nImages: 2,
+      nLoadedImages: 0,
       fingerImg: new Image,
+      faceImg: new Image,
 
 	    init: function() {
 
@@ -61,9 +64,16 @@
 
         // load images
         IckyPicky.fingerImg.onload = function() {
-          IckyPicky.loop();
+          nLoadedImages += 1;
+          IckyPicky.maybeLoop();
         }
         IckyPicky.fingerImg.src = '/images/finger.png';
+
+        IckyPicky.faceImg.onload = function() {
+          nLoadedImages += 1;
+          IckyPicky.maybeLoop();
+        }
+        IckyPicky.faceImg.src = '/images/arisaface.jpg';
 
         // listen for clicks
         window.addEventListener('click', function(e) {
@@ -123,16 +133,18 @@
         //IckyPicky.Draw.circle(IckyPicky.Width/2, IckyPicky.HEIGHT/2, 100, 'red');
       },
 
-      // the actual loop
-      // requests animation frame,
-      // then proceeds to update
-      // and render
+      maybeLoop: function() {
+        if (nLoadedImages == nImages) {
+          IckyPicky.loop();
+        }
+      }
+
+      // the game loop
       loop: function() {
+        requestAnimFrame( IckyPicky.loop );
 
-          requestAnimFrame( IckyPicky.loop );
-
-          IckyPicky.update();
-          IckyPicky.render();
+        IckyPicky.update();
+        IckyPicky.render();
       },
 
 	    resize: function() {
@@ -175,8 +187,7 @@
   	IckyPicky.ios = ( IckyPicky.ua.indexOf('iphone') > -1 || IckyPicky.ua.indexOf('ipad') > -1  ) ? 
   	    true : false;
 
-  	// abstracts various canvas operations into
-  	// standalone functions
+  	// abstracts various canvas operations
   	IckyPicky.Draw = {
 
 	    clear: function() {
