@@ -39,7 +39,11 @@
       faceRate: 1,
       fingerPos: 400,
       fingerRate: 5,
+
+      nImages: 2,
+      nLoadedImages: 0,
       fingerImg: new Image,
+      faceImg: new Image,
 
 	    init: function() {
 
@@ -61,9 +65,16 @@
 
         // load images
         IckyPicky.fingerImg.onload = function() {
-          IckyPicky.loop();
+          IckyPicky.nLoadedImages += 1;
+          IckyPicky.maybeLoop();
         }
         IckyPicky.fingerImg.src = '/images/finger.png';
+
+        IckyPicky.faceImg.onload = function() {
+          IckyPicky.nLoadedImages += 1;
+          IckyPicky.maybeLoop();
+        }
+        IckyPicky.faceImg.src = '/images/arisaface.jpg';
 
         // listen for clicks
         window.addEventListener('click', function(e) {
@@ -117,22 +128,24 @@
         IckyPicky.Draw.clear();
         IckyPicky.Draw.rect(0,IckyPicky.HEIGHT-45,IckyPicky.WIDTH,45, 'green');
         //IckyPicky.Draw.circle(IckyPicky.facePos, 100, 50, 'rgba(255,0,0,0.5)');
-        IckyPicky.ctx.drawImage(IckyPicky.fingerImg, IckyPicky.facePos, 100,150,250);
+        IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.facePos, 100,150,250);
         IckyPicky.ctx.drawImage(IckyPicky.fingerImg, IckyPicky.WIDTH-205, IckyPicky.fingerPos, 70, 150);
         //IckyPicky.Draw.text('Hello World', 100, 100, 10, '#000');
         //IckyPicky.Draw.circle(IckyPicky.Width/2, IckyPicky.HEIGHT/2, 100, 'red');
       },
 
-      // the actual loop
-      // requests animation frame,
-      // then proceeds to update
-      // and render
+      maybeLoop: function() {
+        if (IckyPicky.nLoadedImages == IckyPicky.nImages) {
+          IckyPicky.loop();
+        }
+      },
+
+      // the game loop
       loop: function() {
+        requestAnimFrame( IckyPicky.loop );
 
-          requestAnimFrame( IckyPicky.loop );
-
-          IckyPicky.update();
-          IckyPicky.render();
+        IckyPicky.update();
+        IckyPicky.render();
       },
 
 	    resize: function() {
@@ -175,8 +188,7 @@
   	IckyPicky.ios = ( IckyPicky.ua.indexOf('iphone') > -1 || IckyPicky.ua.indexOf('ipad') > -1  ) ? 
   	    true : false;
 
-  	// abstracts various canvas operations into
-  	// standalone functions
+  	// abstracts various canvas operations
   	IckyPicky.Draw = {
 
 	    clear: function() {
