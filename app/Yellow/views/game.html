@@ -29,6 +29,7 @@
     scale:  1,
     offset: {top: 0, left: 0}, 
     hit: 0,
+    score: 0,
     // we'll set the rest of these
     // in the init function
     RATIO:  null,
@@ -129,7 +130,7 @@
     // this is where all entities will be moved
     // and checked for collisions, etc.
     update: function() {
-      if (IckyPicky.faceXPos < 2 || IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth) {
+      if ( (IckyPicky.faceXPos < 2 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth && !IckyPicky.hit)) {
         IckyPicky.faceRate = IckyPicky.faceRate * -1;
       }
       IckyPicky.faceXPos += IckyPicky.faceRate;
@@ -143,17 +144,28 @@
       };
       
       var finger = {
-        left = IckyPicky.handXOffset - 10,
-        right = IckyPicky.handXOffset - 10 + IckyPicky.fingerWidth,
-        top = IckyPicky.handPos + 15,
-        bottom = IckyPicky.handPos + 15 + IckyPicky.fingerHeight
+        left: IckyPicky.handXOffset - 10,
+        right: IckyPicky.handXOffset - 10 + IckyPicky.fingerWidth,
+        top: IckyPicky.handPos + 15,
+        bottom: IckyPicky.handPos + 15 + IckyPicky.fingerHeight
       };
 
-      hit = IckyPicky.collides(nose, finger);
+      IckyPicky.hit = IckyPicky.collides(nose, finger);
 
-      if (IckyPicky.Input.tapped && IckyPicky.handPos > -155) {
+      if (IckyPicky.hit) {
+        IckyPicky.handPos = 400;
+        IckyPicky.hit = false;
+        IckyPicky.Input.tapped = false;
+        IckyPicky.score += 1;
+      }
+
+      if (IckyPicky.Input.tapped && IckyPicky.handPos > -155 && !IckyPicky.hit) {
           IckyPicky.handPos -= IckyPicky.handRate;
+      }
 
+      if(IckyPicky.handPos < -154) {
+        IckyPicky.handPos = 400;
+        IckyPicky.Input.tapped = false;
       }
     },
 
@@ -167,7 +179,9 @@
       IckyPicky.Draw.rect(IckyPicky.faceXPos + IckyPicky.noseXOffset, IckyPicky.faceYPos + IckyPicky.noseYOffset, 5, 5, 'green');
       IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
       
-      IckyPicky.Draw.rect(IckyPicky.handXOffset - 10, IckyPicky.handPos + 15, 5, 5, 'green');
+      IckyPicky.Draw.rect(IckyPicky.handXOffset - IckyPicky.fingerXOffset, IckyPicky.handPos + IckyPicky.fingerYOffset, 5, 5, 'green');
+      IckyPicky.Draw.text('score: ' + IckyPicky.score.toString(), 20, 20, 10, '#000');
+
       //IckyPicky.Draw.text('Hello World', 100, 100, 10, '#000');
       //IckyPicky.Draw.circle(IckyPicky.Width/2, IckyPicky.HEIGHT/2, 100, 'red');
     },
