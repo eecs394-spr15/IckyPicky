@@ -22,7 +22,7 @@ module.exports =
   #]
 
   rootView:  
-     location: "Yellow#index"
+     location: "geolocation#index"
      
   
   preloads: [
