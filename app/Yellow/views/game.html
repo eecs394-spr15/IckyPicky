@@ -35,14 +35,30 @@
 	    currentHeight:  null,
 	    canvas: null,
 	    ctx:  null,
-      facePos: 10,
+
+      // variables for the face
+      faceXPos: 10,
+      faceYPos: 100,
       faceRate: 1,
-      fingerPos: 400,
-      fingerRate: 5,
+      faceHeight: 250,
+      faceWidth: 150,
+      noseXOffset: 75,
+      noseYOffset: 125,
+      noseWidth: 15,
+      noseHeight: 15,
+
+      // varibles for the hand
+      handPos: 400,
+      handXOffset: 115,
+      handRate: 5,
+      fingerXOffset: 10,
+      fingerYOffset: 15,
+      fingerWidth: 15,
+      fingerHeight: 15,
 
       nImages: 2,
       nLoadedImages: 0,
-      fingerImg: new Image,
+      handImg: new Image,
       faceImg: new Image,
 
 	    init: function() {
@@ -64,11 +80,11 @@
         IckyPicky.ctx = IckyPicky.canvas.getContext('2d');
 
         // load images
-        IckyPicky.fingerImg.onload = function() {
+        IckyPicky.handImg.onload = function() {
           IckyPicky.nLoadedImages += 1;
           IckyPicky.maybeLoop();
         }
-        IckyPicky.fingerImg.src = '/images/finger.png';
+        IckyPicky.handImg.src = '/images/finger.png';
 
         IckyPicky.faceImg.onload = function() {
           IckyPicky.nLoadedImages += 1;
@@ -112,14 +128,14 @@
       // this is where all entities will be moved
       // and checked for collisions, etc.
       update: function() {
-        if (IckyPicky.facePos < 2 || IckyPicky.facePos > IckyPicky.WIDTH - 1) {
+        if (IckyPicky.faceXPos < 2 || IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth) {
           IckyPicky.faceRate = IckyPicky.faceRate * -1;
         }
-        IckyPicky.facePos += IckyPicky.faceRate;
+        IckyPicky.faceXPos += IckyPicky.faceRate;
 
 
-        if (IckyPicky.Input.tapped && IckyPicky.fingerPos > -155) {
-            IckyPicky.fingerPos -= IckyPicky.fingerRate;
+        if (IckyPicky.Input.tapped && IckyPicky.handPos > -155) {
+            IckyPicky.handPos -= IckyPicky.handRate;
         }
       },
 
@@ -128,8 +144,10 @@
         IckyPicky.Draw.clear();
         IckyPicky.Draw.rect(0,IckyPicky.HEIGHT-45,IckyPicky.WIDTH,45, 'green');
         //IckyPicky.Draw.circle(IckyPicky.facePos, 100, 50, 'rgba(255,0,0,0.5)');
-        IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.facePos, 100,150,250);
-        IckyPicky.ctx.drawImage(IckyPicky.fingerImg, IckyPicky.WIDTH-205, IckyPicky.fingerPos, 70, 150);
+        IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
+        IckyPicky.Draw.rect(IckyPicky.faceXPos + IckyPicky.noseXOffset, IckyPicky.faceYPos + IckyPicky.noseYOffset, 5, 5, 'green');
+        IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
+        IckyPicky.Draw.rect(IckyPicky.handXOffset - 10, IckyPicky.handPos + 15, 5, 5, 'green');
         //IckyPicky.Draw.text('Hello World', 100, 100, 10, '#000');
         //IckyPicky.Draw.circle(IckyPicky.Width/2, IckyPicky.HEIGHT/2, 100, 'red');
       },
