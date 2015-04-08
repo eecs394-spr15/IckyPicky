@@ -53,8 +53,8 @@
     handPos: 400,
     handXOffset: 115,
     handRate: 5,
-    fingerXOffset: 10,
-    fingerYOffset: 15,
+    fingerXOffset: 18,
+    fingerYOffset: 3,
     fingerWidth: 15,
     fingerHeight: 15,
 
@@ -144,10 +144,10 @@
       };
       
       var finger = {
-        left: IckyPicky.handXOffset - 10,
-        right: IckyPicky.handXOffset - 10 + IckyPicky.fingerWidth,
-        top: IckyPicky.handPos + 15,
-        bottom: IckyPicky.handPos + 15 + IckyPicky.fingerHeight
+        left: IckyPicky.handXOffset + IckyPicky.fingerXOffset,
+        right: IckyPicky.handXOffset + IckyPicky.fingerXOffset + IckyPicky.fingerWidth,
+        top: IckyPicky.handPos + IckyPicky.fingerYOffset,
+        bottom: IckyPicky.handPos + IckyPicky.fingerYOffset + IckyPicky.fingerHeight
       };
 
       IckyPicky.hit = IckyPicky.collides(nose, finger);
@@ -179,7 +179,7 @@
       IckyPicky.Draw.rect(IckyPicky.faceXPos + IckyPicky.noseXOffset, IckyPicky.faceYPos + IckyPicky.noseYOffset, 5, 5, 'green');
       IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
       
-      IckyPicky.Draw.rect(IckyPicky.handXOffset - IckyPicky.fingerXOffset, IckyPicky.handPos + IckyPicky.fingerYOffset, 5, 5, 'green');
+      IckyPicky.Draw.rect(IckyPicky.handXOffset + IckyPicky.fingerXOffset, IckyPicky.handPos + IckyPicky.fingerYOffset, 5, 5, 'green');
       IckyPicky.Draw.text('score: ' + IckyPicky.score.toString(), 20, 20, 10, '#000');
 
       //IckyPicky.Draw.text('Hello World', 100, 100, 10, '#000');
