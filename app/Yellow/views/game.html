@@ -51,7 +51,7 @@
     // varibles for the hand
     handPos: 400,
     handXOffset: 115,
-    handRate: 1,
+    handRate: 5,
     fingerXOffset: 10,
     fingerYOffset: 15,
     fingerWidth: 15,
@@ -137,36 +137,22 @@
 
       var nose = {
         left: IckyPicky.noseXOffset + IckyPicky.faceXPos,
-        right: nose.left + IckyPicky.noseWidth,
+        right: IckyPicky.noseXOffset + IckyPicky.faceXPos + IckyPicky.noseWidth,
         top: IckyPicky.faceYPos + IckyPicky.noseYOffset,
-        bottom: nose.top + IckyPicky.noseHeight
+        bottom: IckyPicky.faceYPos + IckyPicky.noseYOffset + IckyPicky.noseHeight
       };
-
-      /*
-      nose.left = IckyPicky.noseXOffset + IckyPicky.faceXPos;
-      nose.right = nose.left + IckyPicky.noseWidth;
-      nose.top = IckyPicky.faceYPos + IckyPicky.noseYOffset;
-      nose.bottom = nose.top + IckyPicky.noseHeight;
       
       var finger = {
-
-          finger.left = IckyPicky.handXOffset - 10;
-          finger.right = finger.left + IckyPicky.fingerWidth;
-          finger.top = IckyPicky.handPos + 15;
-          finger.bottom = finger.top + IckyPicky.fingerHeight;
+        left = IckyPicky.handXOffset - 10,
+        right = IckyPicky.handXOffset - 10 + IckyPicky.fingerWidth,
+        top = IckyPicky.handPos + 15,
+        bottom = IckyPicky.handPos + 15 + IckyPicky.fingerHeight
       };
 
-
       hit = IckyPicky.collides(nose, finger);
-      */
 
       if (IckyPicky.Input.tapped && IckyPicky.handPos > -155) {
           IckyPicky.handPos -= IckyPicky.handRate;
-
-          
-
-          
-
 
       }
     },
