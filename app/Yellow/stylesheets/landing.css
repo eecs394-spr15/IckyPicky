@@ -1,5 +1,6 @@
-.landingPage {
-	background-image: url("/images/backgound.gif") !important;
+.landingPage {	
+	background: url("/images/background.png");
+	background-repeat: repeat;
 }
 .startbutton {
 	postion: relative;
@@ -41,7 +42,17 @@
 }
 
 .logo {
-	position: absolute;
-	width:85%;
-	left: 7.5%;	
+	/*position: absolute;*/
+	width:100%;
+	/*left: 2.5%;	*/
+}
+
+.info {
+	position:absolute;	
+	background: transparent;
+	top: 50%;
+	text-align: center;
+	width: 100%;
+	font-size: 1em;
+	font-weight: bold;
 }
