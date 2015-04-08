@@ -8,11 +8,26 @@
 
   <canvas></canvas>
   <script>
-    var POP = {
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating
+    // shim layer with setTimeout fallback
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+
+    var IckyPicky = {
 
 	    // set up some initial values
 	    WIDTH: 320, 
-	    HEIGHT:  480, 
+	    HEIGHT:  480,
+      scale:  1,
+      offset: {top: 0, left: 0}, 
 	    // we'll set the rest of these
 	    // in the init function
 	    RATIO:  null,
@@ -20,55 +35,138 @@
 	    currentHeight:  null,
 	    canvas: null,
 	    ctx:  null,
+      facePos: 10,
+      faceRate: 1,
+      fingerPos: 400,
+      fingerRate: 5,
+
+      nImages: 2,
+      nLoadedImages: 0,
+      fingerImg: new Image,
+      faceImg: new Image,
 
 	    init: function() {
 
         // the proportion of width to height
-        POP.RATIO = POP.WIDTH / POP.HEIGHT;
+        IckyPicky.RATIO = IckyPicky.WIDTH / IckyPicky.HEIGHT;
         // these will change when the screen is resized
-        POP.currentWidth = POP.WIDTH;
-        POP.currentHeight = POP.HEIGHT;
+        IckyPicky.currentWidth = IckyPicky.WIDTH;
+        IckyPicky.currentHeight = IckyPicky.HEIGHT;
         // this is our canvas element
-        POP.canvas = document.getElementsByTagName('canvas')[0];
+        IckyPicky.canvas = document.getElementsByTagName('canvas')[0];
         // setting this is important
         // otherwise the browser will
         // default to 320 x 200
-        POP.canvas.width = POP.WIDTH;
-        POP.canvas.height = POP.HEIGHT;
+        IckyPicky.canvas.width = IckyPicky.WIDTH;
+        IckyPicky.canvas.height = IckyPicky.HEIGHT;
         // the canvas context enables us to 
         // interact with the canvas api
-        POP.ctx = POP.canvas.getContext('2d');
+        IckyPicky.ctx = IckyPicky.canvas.getContext('2d');
+
+        // load images
+        IckyPicky.fingerImg.onload = function() {
+          IckyPicky.nLoadedImages += 1;
+          IckyPicky.maybeLoop();
+        }
+        IckyPicky.fingerImg.src = '/images/finger.png';
+
+        IckyPicky.faceImg.onload = function() {
+          IckyPicky.nLoadedImages += 1;
+          IckyPicky.maybeLoop();
+        }
+        IckyPicky.faceImg.src = '/images/arisaface.jpg';
+
+        // listen for clicks
+        window.addEventListener('click', function(e) {
+            e.preventDefault();
+            IckyPicky.Input.set(e);
+        }, false);
+
+        // listen for touches
+        window.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            // the event object has an array
+            // called touches, we just want
+            // the first touch
+            IckyPicky.Input.set(e.touches[0]);
+        }, false);
+        window.addEventListener('touchmove', function(e) {
+            // we're not interested in this
+            // but prevent default behaviour
+            // so the screen doesn't scroll
+            // or zoom
+            e.preventDefault();
+        }, false);
+        window.addEventListener('touchend', function(e) {
+            // as above
+            e.preventDefault();
+        }, false);
 
         // we're ready to resize
-        POP.resize();
+        IckyPicky.resize();
 
-        // include this at the end of POP.init function
-        POP.Draw.clear();
-        POP.Draw.rect(120,120,150,150, 'green');
-        POP.Draw.circle(100, 100, 50, 'rgba(255,0,0,0.5)');
-        POP.Draw.text('Hello World', 100, 100, 10, '#000');
-
+        // it will then repeat continuously
+        //IckyPicky.loop();
 	    },
+
+      // this is where all entities will be moved
+      // and checked for collisions, etc.
+      update: function() {
+        if (IckyPicky.facePos < 2 || IckyPicky.facePos > IckyPicky.WIDTH - 1) {
+          IckyPicky.faceRate = IckyPicky.faceRate * -1;
+        }
+        IckyPicky.facePos += IckyPicky.faceRate;
+
+
+        if (IckyPicky.Input.tapped && IckyPicky.fingerPos > -155) {
+            IckyPicky.fingerPos -= IckyPicky.fingerRate;
+        }
+      },
+
+      // this is where we draw all the entities
+      render: function() {
+        IckyPicky.Draw.clear();
+        IckyPicky.Draw.rect(0,IckyPicky.HEIGHT-45,IckyPicky.WIDTH,45, 'green');
+        //IckyPicky.Draw.circle(IckyPicky.facePos, 100, 50, 'rgba(255,0,0,0.5)');
+        IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.facePos, 100,150,250);
+        IckyPicky.ctx.drawImage(IckyPicky.fingerImg, IckyPicky.WIDTH-205, IckyPicky.fingerPos, 70, 150);
+        //IckyPicky.Draw.text('Hello World', 100, 100, 10, '#000');
+        //IckyPicky.Draw.circle(IckyPicky.Width/2, IckyPicky.HEIGHT/2, 100, 'red');
+      },
+
+      maybeLoop: function() {
+        if (IckyPicky.nLoadedImages == IckyPicky.nImages) {
+          IckyPicky.loop();
+        }
+      },
+
+      // the game loop
+      loop: function() {
+        requestAnimFrame( IckyPicky.loop );
+
+        IckyPicky.update();
+        IckyPicky.render();
+      },
 
 	    resize: function() {
 
-        POP.currentHeight = window.innerHeight;
+        IckyPicky.currentHeight = window.innerHeight;
         // resize the width in proportion
         // to the new height
-        POP.currentWidth = POP.currentHeight * POP.RATIO;
+        IckyPicky.currentWidth = IckyPicky.currentHeight * IckyPicky.RATIO;
 
         // this will create some extra space on the
         // page, allowing us to scroll past
         // the address bar, thus hiding it.
-        if (POP.android || POP.ios) {
-          document.body.style.height = (window.innerHeight + 50) + 'px';
+        if (IckyPicky.android || IckyPicky.ios) {
+          //document.body.style.height = (window.innerHeight + 50) + 'px';
         }
 
         // set the new canvas style width and height
         // note: our canvas is still 320 x 480, but
         // we're essentially scaling it with CSS
-        POP.canvas.style.width = POP.currentWidth + 'px';
-        POP.canvas.style.height = POP.currentHeight + 'px';
+        IckyPicky.canvas.style.width = IckyPicky.currentWidth + 'px';
+        IckyPicky.canvas.style.height = IckyPicky.currentHeight + 'px';
 
         // we use a timeout here because some mobile
         // browsers don't fire if there is not
@@ -79,44 +177,60 @@
 	    }
     };
 
-  	window.addEventListener('load', POP.init, false);
-  	window.addEventListener('resize', POP.resize, false);
+  	window.addEventListener('load', IckyPicky.init, false);
+  	window.addEventListener('resize', IckyPicky.resize, false);
 
   	// we need to sniff out Android and iOS
   	// so that we can hide the address bar in
   	// our resize function
-  	POP.ua = navigator.userAgent.toLowerCase();
-  	POP.android = POP.ua.indexOf('android') > -1 ? true : false;
-  	POP.ios = ( POP.ua.indexOf('iphone') > -1 || POP.ua.indexOf('ipad') > -1  ) ? 
+  	IckyPicky.ua = navigator.userAgent.toLowerCase();
+  	IckyPicky.android = IckyPicky.ua.indexOf('android') > -1 ? true : false;
+  	IckyPicky.ios = ( IckyPicky.ua.indexOf('iphone') > -1 || IckyPicky.ua.indexOf('ipad') > -1  ) ? 
   	    true : false;
 
-  	// abstracts various canvas operations into
-  	// standalone functions
-  	POP.Draw = {
+  	// abstracts various canvas operations
+  	IckyPicky.Draw = {
 
 	    clear: function() {
-        POP.ctx.clearRect(0, 0, POP.WIDTH, POP.HEIGHT);
+        IckyPicky.ctx.clearRect(0, 0, IckyPicky.WIDTH, IckyPicky.HEIGHT);
 	    },
 
 	    rect: function(x, y, w, h, col) {
-        POP.ctx.fillStyle = col;
-        POP.ctx.fillRect(x, y, w, h);
+        IckyPicky.ctx.fillStyle = col;
+        IckyPicky.ctx.fillRect(x, y, w, h);
 	    },
 
 	    circle: function(x, y, r, col) {
-        POP.ctx.fillStyle = col;
-        POP.ctx.beginPath();
-        POP.ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
-        POP.ctx.closePath();
-        POP.ctx.fill();
+        IckyPicky.ctx.fillStyle = col;
+        IckyPicky.ctx.beginPath();
+        IckyPicky.ctx.arc(x + 5, y + 5, r, 0,  Math.PI * 2, true);
+        IckyPicky.ctx.closePath();
+        IckyPicky.ctx.fill();
 	    },
 
 	    text: function(string, x, y, size, col) {
-        POP.ctx.font = 'bold '+size+'px Monospace';
-        POP.ctx.fillStyle = col;
-        POP.ctx.fillText(string, x, y);
+        IckyPicky.ctx.font = 'bold '+size+'px Monospace';
+        IckyPicky.ctx.fillStyle = col;
+        IckyPicky.ctx.fillText(string, x, y);
 	    }
 	};
+
+  IckyPicky.Input = {
+
+    x: 0,
+    y: 0,
+    tapped :false,
+
+    set: function(data) {
+        this.x = (data.pageX - IckyPicky.offset.left) / IckyPicky.scale;
+        this.y = (data.pageY - IckyPicky.offset.top) / IckyPicky.scale;
+        this.tapped = true;
+
+    }
+
+};
+
+//steroids.view.setBackgroundImage("/img/space-background.png");
 
 </script>
 
