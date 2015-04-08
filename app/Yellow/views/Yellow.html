@@ -1,20 +1,23 @@
 
 
-<div ng-controller="IndexController">
+<div ng-controller="IndexController" >
   <super-navbar>
     <super-navbar-title>
       Home
     </super-navbar-title>
   </super-navbar>
 
-  <div class = "welcome">
-  	<img src = "/images/logo_rasterized.png">
-	</div>
+  <div class = "landingPage">
+    <div class = "welcome">
+    	<img src = "/images/logo_rasterized.png" class = "logo">
+  	</div>
 
 
-  <super-navigate view-id = "Yellow#game" class="startbutton">
-	  <button class = "button" id = "startgame"> 
-  		<img src = "/images/start.png">
-  	</button>
-  </super-navigate>
+    <super-navigate view-id = "Yellow#game" class="startbutton">
+  	  <button class = "button" id = "startgame"> 
+    		<img src = "/images/start.png" class="startimg">
+        <img src = "/images/nose.png" class = "startnose">        
+    	</button>
+    </super-navigate>
+  </div>
 </div>
