@@ -1,25 +1,58 @@
+.landingPage {	
+	background: url("/images/background.png");
+	background-repeat: repeat;
+}
 .startbutton {
 	postion: relative;
 }
 
 #startgame {
-	width: 12em;
+	width: 13em;
 	position: absolute;
 	margin: 0;
-	top: 25em;
-	left: calc(50% - 6em);
+	top: 19em;
+	left: calc(50% - 6.5em);
 	margin-right: -50%;
 	transform: translate(-50%, -50%);
+
+	background: transparent;
+	border: none;
 
 }
 
 .welcome {
-	padding-top: 3.2em;
+	top: 2em;
 
 }
 
-img {
-	text-align: center;
-	vertical-align: center;
+.startimg {
+	/*text-align: center;
+	vertical-align: center;*/
 	width: 100%;
+	top: 1.5em;
+	position: relative;
+	z-index: 1;
+}
+
+.startnose {
+	width: 60%;
+	left: 20%;
+	position: absolute;
+
+}
+
+.logo {
+	/*position: absolute;*/
+	width:100%;
+	/*left: 2.5%;	*/
+}
+
+.info {
+	position:absolute;	
+	background: transparent;
+	top: 50%;
+	text-align: center;
+	width: 100%;
+	font-size: 1em;
+	font-weight: bold;
 }
