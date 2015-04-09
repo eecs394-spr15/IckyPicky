@@ -4,17 +4,17 @@
 }
 .startbutton {
 	postion: relative;
+	text-align:center;
 }
 
 #startgame {
 	width: 13em;
 	position: absolute;
 	margin: 0;
-	top: 19em;
+	bottom: 15%;
 	left: calc(50% - 6.5em);
 	margin-right: -50%;
-	transform: translate(-50%, -50%);
-
+	
 	background: transparent;
 	border: none;
 
