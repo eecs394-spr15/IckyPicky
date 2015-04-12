@@ -25,16 +25,17 @@ module.exports =
      location: "Yellow#Yellow"
      
   
-  preloads: [
-    {
-      id: "learn-more"
-      location: "example#learn-more"
-    }
-    {
-      id: "using-the-scanner"
-      location: "example#using-the-scanner"
-    }
-  ]
+  #preloads: [
+  #  {
+  #    id: "learn-more"
+  #    location: "example#learn-more"
+  #  }
+  #  {
+  #    id: "using-the-scanner"
+  #    location: "example#using-the-scanner"
+  #  }
+  #]
+  
 
   # drawers:
   #   left:
