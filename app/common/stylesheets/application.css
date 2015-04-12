@@ -19,5 +19,5 @@ body {
 	text-align: center;
 }
 
-canvas { display: block; margin: 0 auto; background: #fff; }
+canvas { display: block; margin: 0 auto; background: url("/images/background.png"); }
 
