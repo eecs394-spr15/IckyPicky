@@ -30,6 +30,9 @@
     offset: {top: 0, left: 0}, 
     hit: 0,
     score: 0,
+    heart:100,
+    level: 1,
+    allLevel: 3,
     // we'll set the rest of these
     // in the init function
     RATIO:  null,
@@ -39,20 +42,20 @@
     ctx:  null,
 
     // variables for the face
-    faceXPos: 10,
-    faceYPos: 100,
-    faceRate: 1,
-    faceHeight: 250,
-    faceWidth: 150,
-    noseXOffset: 75,
-    noseYOffset: 125,
+    faceXPos: 50,
+    faceYPos: 90,
+    faceRate: 1.0,
+    faceHeight: 300,
+    faceWidth: 200,
+    noseXOffset: 100,
+    noseYOffset: 150,
     noseWidth: 15,
     noseHeight: 15,
 
     // varibles for the hand
     handPos: 400,
     handXOffset: 115,
-    handRate: 5,
+    handRate: 5.0,
     fingerXOffset: 18,
     fingerYOffset: 3,
     fingerWidth: 15,
@@ -64,6 +67,9 @@
     faceImg: new Image,
 
     init: function() {
+
+      var imgObject = new Image();
+      var i = 0;
 
       // the proportion of width to height
       IckyPicky.RATIO = IckyPicky.WIDTH / IckyPicky.HEIGHT;
@@ -88,11 +94,13 @@
       }
       IckyPicky.handImg.src = '/images/finger.png';
 
+
       IckyPicky.faceImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
-      IckyPicky.faceImg.src = '/images/bidenface.png';
+      IckyPicky.faceImg.src = '/images/arisaface.jpg';
+
 
       // listen for clicks
       window.addEventListener('click', function(e) {
@@ -130,10 +138,10 @@
     // this is where all entities will be moved
     // and checked for collisions, etc.
     update: function() {
-      if ( (IckyPicky.faceXPos < 2 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth && !IckyPicky.hit)) {
+      if ( (IckyPicky.faceXPos < -20 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth - 10 && !IckyPicky.hit)) {
         IckyPicky.faceRate = IckyPicky.faceRate * -1;
       }
-      IckyPicky.faceXPos += IckyPicky.faceRate;
+      IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
 
 
       var nose = {
@@ -152,6 +160,38 @@
 
       IckyPicky.hit = IckyPicky.collides(nose, finger);
 
+      if(IckyPicky.level <= IckyPicky.allLevel) { 
+
+        switch(IckyPicky.level) {
+          case 1:
+              if(IckyPicky.score == 5) {
+                IckyPicky.level += 1;
+              }
+              break;
+          case 2:
+              if(IckyPicky.score == 10) {
+                IckyPicky.level += 1;
+              }
+              break;
+          case 3:
+              if(IckyPicky.score == 15) {
+                IckyPicky.level += 1;
+              }
+              break;
+          case 4:
+              if(IckyPicky.score == 20) {
+                IckyPicky.level += 1;
+              }
+              break;
+          case 5:
+              if(IckyPicky.score == 25) {
+                IckyPicky.level += 1;
+              }
+              break;
+        }
+
+    }
+
       if (IckyPicky.hit) {
         IckyPicky.handPos = 400;
         IckyPicky.hit = false;
@@ -163,27 +203,66 @@
           IckyPicky.handPos -= IckyPicky.handRate;
       }
 
-      if(IckyPicky.handPos < -154) {
+      if(IckyPicky.heart == 0) {
+        window.alert("Game Over");
+        IckyPicky.heart = 3;
+        IckyPicky.score = 0;
+        IckyPicky.level = 0;
         IckyPicky.handPos = 400;
         IckyPicky.Input.tapped = false;
       }
+
+      if(IckyPicky.handPos < -154) {
+        IckyPicky.heart -= 1;
+        if(IckyPicky.heart != 0) {
+          IckyPicky.handPos = 400;
+          IckyPicky.Input.tapped = false;
+        }
+      } 
     },
 
     // this is where we draw all the entities
     render: function() {
-      IckyPicky.Draw.clear();
-      IckyPicky.Draw.rect(0,IckyPicky.HEIGHT-45,IckyPicky.WIDTH,45, 'green');
-      //IckyPicky.Draw.circle(IckyPicky.facePos, 100, 50, 'rgba(255,0,0,0.5)');
-      IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
-      
-      IckyPicky.Draw.rect(IckyPicky.faceXPos + IckyPicky.noseXOffset, IckyPicky.faceYPos + IckyPicky.noseYOffset, 5, 5, 'green');
-      IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
-      
-      IckyPicky.Draw.rect(IckyPicky.handXOffset + IckyPicky.fingerXOffset, IckyPicky.handPos + IckyPicky.fingerYOffset, 5, 5, 'green');
-      IckyPicky.Draw.text('score: ' + IckyPicky.score.toString(), 20, 20, 10, '#000');
 
-      //IckyPicky.Draw.text('Hello World', 100, 100, 10, '#000');
-      //IckyPicky.Draw.circle(IckyPicky.Width/2, IckyPicky.HEIGHT/2, 100, 'red');
+      IckyPicky.Draw.clear();
+
+      // draw the green bar on the bottom
+      IckyPicky.Draw.rect(0,IckyPicky.HEIGHT-45,IckyPicky.WIDTH,45, 'green');
+
+      // draw the face images, and a reference green rec on the face
+      IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
+      IckyPicky.Draw.rect(IckyPicky.faceXPos + IckyPicky.noseXOffset, IckyPicky.faceYPos + IckyPicky.noseYOffset, 5, 5, 'green');
+
+      // draw the finger images, and a reference green rec on the finger
+      IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
+      IckyPicky.Draw.rect(IckyPicky.handXOffset + IckyPicky.fingerXOffset, IckyPicky.handPos + IckyPicky.fingerYOffset, 5, 5, 'green');
+
+      // draw the score board
+      IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 5, 25, 12, '#000');
+      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
+
+      
+      switch(IckyPicky.level) {
+        case 1:
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 75, 12, '#000000');
+            break;
+        case 2:
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 75, 12, '#0000FF');
+            break;
+        case 3:
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 75, 12, '#00BFFF');
+            break;
+        case 4:
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 75, 12, '#32CD32');
+            break;
+        case 5:
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 75, 12, '#B22222');
+            break;
+      }
+      
+    
+      IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 75, 12, '#000');
+
     },
 
     maybeLoop: function() {
