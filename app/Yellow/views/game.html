@@ -51,7 +51,6 @@
     noseYOffset: 150,
     noseWidth: 15,
     noseHeight: 15,
-    facesAndNoses = new Array,
 
     // varibles for the hand
     handPos: 400,
@@ -87,17 +86,6 @@
       // the canvas context enables us to 
       // interact with the canvas api
       IckyPicky.ctx = IckyPicky.canvas.getContext('2d');
-
-      // set images and nose positions
-      IckyPicky.facesAndNoses[0] = {img: '/images/arisaface.jpg', noseX: 100, noseY: 150}
-      IckyPicky.facesAndNoses[1] = {img: '/images/bingface.jpg', noseX: 100, noseY: 150}
-      IckyPicky.facesAndNoses[2] = {img: '/images/elsieface.jpg', noseX: 100, noseY: 150}
-      IckyPicky.facesAndNoses[3] = {img: '/images/jonface.jpg', noseX: 100, noseY: 150}
-      IckyPicky.facesAndNoses[4] = {img: '/images/paigeface.jpg', noseX: 100, noseY: 150}
-
-      for(i=0; i <=4; i++){
-        imgObject.src = IckyPicky.facesAndNoses[i].img;
-      }
 
       // load images
       IckyPicky.handImg.onload = function() {
