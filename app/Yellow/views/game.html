@@ -68,8 +68,6 @@
 
     init: function() {
 
-      var imgObject = new Image();
-      var i = 0;
 
       // the proportion of width to height
       IckyPicky.RATIO = IckyPicky.WIDTH / IckyPicky.HEIGHT;
@@ -207,7 +205,7 @@
         window.alert("Game Over");
         IckyPicky.heart = 3;
         IckyPicky.score = 0;
-        IckyPicky.level = 0;
+        IckyPicky.level = 1;
         IckyPicky.handPos = 400;
         IckyPicky.Input.tapped = false;
       }
