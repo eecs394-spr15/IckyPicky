@@ -66,6 +66,7 @@
     handImg: new Image,
     arisaFaceImg: new Image,
     jonFaceImg: new Image,
+    currentFaceImg: new Image,
 
     init: function() {
 
@@ -85,6 +86,9 @@
       // the canvas context enables us to 
       // interact with the canvas api
       IckyPicky.ctx = IckyPicky.canvas.getContext('2d');
+
+      // set initial face for first level
+      IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
 
       // load images
       IckyPicky.handImg.onload = function() {
@@ -170,10 +174,8 @@
         switch(IckyPicky.level) {
           case 1:
               if(IckyPicky.score == 5) {
-                // increment to go to next level
-                // start loading the 
+                IckyPicky.currentFaceImg = IckyPicky.jonFaceImg;
                 IckyPicky.level += 1;
-
               }
               break;
           case 2:
@@ -218,6 +220,7 @@
         IckyPicky.level = 1;
         IckyPicky.handPos = 400;
         IckyPicky.Input.tapped = false;
+        IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
       }
 
       if(IckyPicky.handPos < -154) {
@@ -238,12 +241,10 @@
       IckyPicky.Draw.rect(0,IckyPicky.HEIGHT-45,IckyPicky.WIDTH,45, 'green');
 
       // draw the face images, and a reference green rec on the face
-      IckyPicky.ctx.drawImage(IckyPicky.faceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
-      IckyPicky.Draw.rect(IckyPicky.faceXPos + IckyPicky.noseXOffset, IckyPicky.faceYPos + IckyPicky.noseYOffset, 5, 5, 'green');
+      IckyPicky.ctx.drawImage(IckyPicky.currentFaceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
 
       // draw the finger images, and a reference green rec on the finger
       IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
-      IckyPicky.Draw.rect(IckyPicky.handXOffset + IckyPicky.fingerXOffset, IckyPicky.handPos + IckyPicky.fingerYOffset, 5, 5, 'green');
 
       // draw the score board
       IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 5, 25, 12, '#000');
