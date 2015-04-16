@@ -61,10 +61,11 @@
     fingerWidth: 15,
     fingerHeight: 15,
 
-    nImages: 2,
+    nImages: 3,
     nLoadedImages: 0,
     handImg: new Image,
-    faceImg: new Image,
+    arisaFaceImg: new Image,
+    jonFaceImg: new Image,
 
     init: function() {
 
@@ -93,11 +94,17 @@
       IckyPicky.handImg.src = '/images/finger.png';
 
 
-      IckyPicky.faceImg.onload = function() {
+      IckyPicky.arisaFaceImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
-      IckyPicky.faceImg.src = '/images/arisaface.png';
+      IckyPicky.arisaFaceImg.src = '/images/arisaface.png';
+
+      IckyPicky.jonFaceImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.jonFaceImg.src = '/images/jonface.png';
 
 
       // listen for clicks
@@ -163,7 +170,10 @@
         switch(IckyPicky.level) {
           case 1:
               if(IckyPicky.score == 5) {
+                // increment to go to next level
+                // start loading the 
                 IckyPicky.level += 1;
+
               }
               break;
           case 2:
