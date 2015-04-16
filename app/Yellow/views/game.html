@@ -203,19 +203,10 @@
     // and checked for collisions, etc.
     update: function() {
 
-      if (IckyPicky.level == 1) {
-        if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
-          IckyPicky.faceRate = IckyPicky.faceRate * -1;
-        }
-        IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
+      if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
+        IckyPicky.faceRate = IckyPicky.faceRate * -1;
       }
-      else {
-        if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
-          IckyPicky.faceRate = IckyPicky.faceRate * -1;
-        }
-        IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
-      }  
-
+      IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
 
       var nose = {
         left: IckyPicky.noseXOffset + IckyPicky.faceXPos,
@@ -330,7 +321,7 @@
       // draw the score board
       IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 5, 25, 16, '#000');
 
-      IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 80, 25, 54, 17);
+      IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
       
