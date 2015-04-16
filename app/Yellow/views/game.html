@@ -61,12 +61,17 @@
     fingerWidth: 15,
     fingerHeight: 15,
 
-    nImages: 3,
+    nImages: 7,
     nLoadedImages: 0,
     handImg: new Image,
     arisaFaceImg: new Image,
     jonFaceImg: new Image,
     currentFaceImg: new Image,
+
+    heartZeroImg: new Image,
+    heartOneImg: new Image,
+    heartTwoImg: new Image,
+    heartFullImg: new Image,
 
     init: function() {
 
@@ -109,6 +114,33 @@
         IckyPicky.maybeLoop();
       }
       IckyPicky.jonFaceImg.src = '/images/jonface.png';
+
+      IckyPicky.heartZeroImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.heartZeroImg.src = '/images/heart_zero.png';
+
+      IckyPicky.heartOneImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.heartOneImg.src = '/images/heart_one.png';
+
+      IckyPicky.heartTwoImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.heartTwoImg.src = '/images/heart_two.png';
+
+      IckyPicky.heartFullImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.heartFullImg.src = '/images/heart_full.png';
+
+      
+
 
 
       // listen for clicks
@@ -248,7 +280,9 @@
 
       // draw the score board
       IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 5, 25, 12, '#000');
-      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
+
+      IckyPicky.ctx.drawImage(IckyPicky.heartFullImg, 5, 50, 20, 15);
+      //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
       
       switch(IckyPicky.level) {
