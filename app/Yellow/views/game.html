@@ -202,10 +202,19 @@
     // this is where all entities will be moved
     // and checked for collisions, etc.
     update: function() {
-      if ( (IckyPicky.faceXPos < -20 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth - 10 && !IckyPicky.hit)) {
-        IckyPicky.faceRate = IckyPicky.faceRate * -1;
+
+      if (IckyPicky.level == 1) {
+        if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
+          IckyPicky.faceRate = IckyPicky.faceRate * -1;
+        }
+        IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
       }
-      IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
+      else {
+        if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
+          IckyPicky.faceRate = IckyPicky.faceRate * -1;
+        }
+        IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
+      }  
 
 
       var nose = {
@@ -321,30 +330,30 @@
       // draw the score board
       IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 5, 25, 16, '#000');
 
-      IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
+      IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 80, 25, 54, 17);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
       
       switch(IckyPicky.level) {
         case 1:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 66, 16, '#000000');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000000');
             break;
         case 2:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 66, 16, '#0000FF');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#0000FF');
             break;
         case 3:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 66, 16, '#00BFFF');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#00BFFF');
             break;
         case 4:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 66, 16, '#32CD32');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#32CD32');
             break;
         case 5:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 66, 16, '#B22222');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#B22222');
             break;
       }
       
     
-      IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 66, 16, '#000');
+      IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000');
 
     },
 
