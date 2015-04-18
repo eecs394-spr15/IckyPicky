@@ -75,6 +75,8 @@ angular
     heartFullImg: new Image,
     currentHeartImg: new Image,
 
+    firstTouch: false,
+
     init: function() {
 
 
@@ -344,6 +346,12 @@ angular
     
       IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000');
 
+      // Draw the tutorial
+      if(!IckyPicky.firstTouch){
+        IckyPicky.Draw.text('Tap the finger,', 70, 80, 20, '#090');
+        IckyPicky.Draw.text('Pick the nose!', 80, 350, 20, '#090');
+      }
+
     },
 
     maybeLoop: function() {
@@ -437,6 +445,7 @@ angular
         this.x = (data.pageX - IckyPicky.offset.left) / IckyPicky.scale;
         this.y = (data.pageY - IckyPicky.offset.top) / IckyPicky.scale;
         this.tapped = true;
+        IckyPicky.firstTouch = true;
     }
   };
 
