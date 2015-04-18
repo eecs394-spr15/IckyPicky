@@ -7,6 +7,29 @@ angular
     // shim layer with setTimeout fallback
 
   Parse.initialize("r0KuXabCgDMYoC1v62X0D5j3hyvDcEI2IDNSPRJM", "Cux3e19rL6sqTDRunw1WWJWbMAlpY1XYg3FsePFH");
+  navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+    destinationType: Camera.DestinationType.DATA_URL,
+    sourceType: Camera.PictureSourceType.PHOTOLIBRARY });
+
+  function onSuccess(imageData) {
+    var Image = Parse.Object.extend("image");
+    var image = new Image();
+
+    var bitmap = new Parse.File("myimage.jpg", imageData);
+    image.set('bitmap', bitmap);
+    image.save(null {
+      success: function() {
+        alert("new object created");
+      },
+      error: function() {
+        alert("failed to create new object");
+      }
+    });
+  }
+
+  function onFail(message) {
+      alert('Failed because: ' + message);
+  }
 
   window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       || 
