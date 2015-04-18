@@ -5,6 +5,9 @@ angular
     
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating
     // shim layer with setTimeout fallback
+
+  Parse.initialize("r0KuXabCgDMYoC1v62X0D5j3hyvDcEI2IDNSPRJM", "Cux3e19rL6sqTDRunw1WWJWbMAlpY1XYg3FsePFH");
+
   window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       || 
             window.webkitRequestAnimationFrame || 
@@ -56,7 +59,7 @@ angular
     fingerWidth: 15,
     fingerHeight: 15,
 
-    nImages: 7,
+    nImages: 10,
     nLoadedImages: 0,
     handImg: new Image,
     arisaFaceImg: new Image,
