@@ -39,8 +39,16 @@ angular
     faceWidth: 200,
     noseXOffset: 0,
     noseYOffset: 0,
+    noseWidth: 38,
+    noseHeight: 44,
+    drawNose: false,
 
-    faceImg: new Image;
+
+    nImages: 2,
+    nLoadedImages: 0,
+
+    faceImg: new Image,
+    noseImg: new Image,
 
     init: function() {
 
@@ -67,14 +75,31 @@ angular
 
       // load images
       NosePoser.faceImg.onload = function() {
-        NosePoser.render()
+        NosePoser.nLoadedImages += 1;
+        NosePoser.maybeStart();
+
+       } 
+      NosePoser.faceImg.src = '/images/arisaface.png';
+
+      NosePoser.noseImg.onload = function(){
+        NosePoser.nLoadedImages += 1;
+        NosePoser.maybeStart();
+      }
+      NosePoser.noseImg.src = '/images/nose.png';
+
+      // we're ready to resize
+      NosePoser.resize();
+    },
+
+    maybeStart: function(){
+      if(NosePoser.nImages = NosePoser.nLoadedImages){
+        NosePoser.render();
 
         // listen for clicks
         window.addEventListener('click', function(e) {
             e.preventDefault();
             NosePoser.Input.set(e);
         }, false);
-
         // listen for touches
         window.addEventListener('touchstart', function(e) {
             e.preventDefault();
@@ -95,17 +120,8 @@ angular
             e.preventDefault();
         }, false);
       }
-      NosePoser.handImg.src = '/images/arisaface.png';
-
-
-      
-
-      // we're ready to resize
-      NosePoser.resize();
-
-      // it will then repeat continuously
-      //NosePoser.loop();
     },
+
 
    
     // this is where we draw all the entities
@@ -118,11 +134,12 @@ angular
 
       // draw the face images, and a reference green rec on the face
       NosePoser.ctx.drawImage(NosePoser.faceImg, NosePoser.faceXPos, NosePoser.faceYPos, NosePoser.faceWidth, NosePoser.faceHeight);
-      
-      }
-      
     
-      NosePoser.Draw.text('Touch the nose\'s location', 5, 60, 20, '#000');
+      NosePoser.Draw.text('Touch the nose\'s location', 9, 60, 20, '#000');
+
+      if(NosePoser.drawNose)
+        NosePoser.ctx.drawImage(NosePoser.noseImg, NosePoser.faceXPos+NosePoser.noseXOffset, NosePoser.faceYPos+NosePoser.noseYOffset,
+          NosePoser.noseWidth, NosePoser.noseHeight);
 
     },
 
@@ -206,11 +223,10 @@ angular
         NosePoser.noseXOffset = this.x - NosePoser.faceXPos;
         NosePoser.noseYOffset = this.y - NosePoser.faceYPos;
 
-        NosePoser.Draw.text('Nose position set!', 5, 250, 20, '#000');
-        NosePoser.Draw.text('X:' + NosePoser.noseXOffset.toString(), 5, 265, 20, '#000');
-        NosePoser.Draw.text('Y:' + NosePoser.noseYOffset.toString(), 5, 280, 20, '#000');
+        NosePoser.drawNose = true;
 
-    }
+        NosePoser.render();
+      }
   };
 //steroids.view.setBackgroundImage("/img/space-background.png");
 
