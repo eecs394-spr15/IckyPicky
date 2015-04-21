@@ -7,6 +7,9 @@ angular
     // shim layer with setTimeout fallback
 
   Parse.initialize("r0KuXabCgDMYoC1v62X0D5j3hyvDcEI2IDNSPRJM", "Cux3e19rL6sqTDRunw1WWJWbMAlpY1XYg3FsePFH");
+  var TestObject = Parse.Object.extend("TestObject");
+  var testObject = new TestObject();
+
   navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
     destinationType: Camera.DestinationType.DATA_URL,
     sourceType: Camera.PictureSourceType.PHOTOLIBRARY });
@@ -14,15 +17,33 @@ angular
   function onSuccess(imageData) {
     var Image = Parse.Object.extend("image");
     var image = new Image();
-
-    var bitmap = new Parse.File("myimage.jpg", imageData);
+    var bitmap = new Parse.File("myimage.jpg", {base64: "data:image/jpeg;base64," + imageData});
     image.set('bitmap', bitmap);
-    image.save(null {
-      success: function() {
-        alert("new object created");
+
+    image.save(null, {
+      success: function(image) {
+
+        /*
+        bitmap.save(null, {
+          success: function(bitmap) {
+            // Execute any logic that should take place after the object is saved.
+            alert('New bitmap created with objectId: ' + bitmap.id);
+            
+          },
+          error: function(bitmap, error) {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert('Failed to create new bitmap, with error code: ' + error.message);
+          }
+        });
+*/
+        // Execute any logic that should take place after the object is saved.
+        alert('New image created with objectId: ' + image.id);
       },
-      error: function() {
-        alert("failed to create new object");
+      error: function(image, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        alert('Failed to create new image, with error code: ' + error.message);
       }
     });
   }
