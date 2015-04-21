@@ -42,6 +42,7 @@ angular
     faceRate: 1.0,
     faceHeight: 300,
     faceWidth: 200,
+    faceRateFlag: 1,
     noseXOffset: 100,
     noseYOffset: 150,
     noseWidth: 15,
@@ -75,6 +76,8 @@ angular
     flippyFingerImg: new Image,
     flippyFinger2Img: new Image,
     nFlipped: 0,
+
+    snotBubbleImg: new Image,
 
 
     init: function() {
@@ -169,6 +172,12 @@ angular
       IckyPicky.flippyFinger2Img.src = '/images/finger_2.png';
       IckyPicky.flippyFingerImg = IckyPicky.handImg;
 
+      IckyPicky.snotBubbleImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.snotBubbleImg.src = '/images/bubble.png';
+
 
 
       // listen for clicks
@@ -210,6 +219,7 @@ angular
 
       if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
         IckyPicky.faceRate = IckyPicky.faceRate * -1;
+        IckyPicky.faceRateFlag = IckyPicky.faceRateFlag * -1;
       }
       IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
 
@@ -284,11 +294,11 @@ angular
           }
         }
         else {
-          if(IckyPicky.faceRate < 0) {
+          if(IckyPicky.faceRateFlag < 0) {
             IckyPicky.faceRate = -1.0;
           }
           else {
-            IckyPicky.faceRate = 1.0;
+            IckyPicky.faceRateFlag = 1.0;
           }
 
           IckyPicky.handImg = IckyPicky.flippyFingerImg;
@@ -299,27 +309,6 @@ angular
           IckyPicky.score += 1;
 
         }
-
-
-        /*
-        if (IckyPicky.nFlipped % 50 == 0 && IckyPicky.nFlipped < 101) {
-          IckyPicky.handImg = IckyPicky.flippyFinger2Img;
-          IckyPicky.nFlipped += 1;
-        }
-        else if (IckyPicky.nFlipped % 50 == 25 && IckyPicky.nFlipped < 101)
-        {
-          IckyPicky.handImg = IckyPicky.flippyFingerImg;
-          IckyPicky.nFlipped += 1;
-        }
-        else if (IckyPicky.nFlipped > 100){     
-          IckyPicky.handImg = IckyPicky.flippyFingerImg;
-          IckyPicky.nFlipped = 0; 
-          IckyPicky.handPos = 400;
-          IckyPicky.hit = false;
-          IckyPicky.Input.tapped = false;
-          IckyPicky.score += 1;
-        }
-        */
 
       }
 
@@ -353,6 +342,8 @@ angular
               IckyPicky.currentHeartImg = IckyPicky.heartZerImg;
               break;
         }
+
+
 
         if(IckyPicky.heart != 0) {
           IckyPicky.handPos = 400;
