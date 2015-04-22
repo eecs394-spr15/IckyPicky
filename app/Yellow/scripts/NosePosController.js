@@ -37,8 +37,8 @@ angular
     faceYPos: 90,
     faceHeight: 300,
     faceWidth: 200,
-    noseXOffset: 0,
-    noseYOffset: 0,
+    noseXOPos: 0,
+    noseYPos: 0,
     noseWidth: 38,
     noseHeight: 44,
     drawNose: false,
@@ -135,10 +135,10 @@ angular
       // draw the face images, and a reference green rec on the face
       NosePoser.ctx.drawImage(NosePoser.faceImg, NosePoser.faceXPos, NosePoser.faceYPos, NosePoser.faceWidth, NosePoser.faceHeight);
     
-      NosePoser.Draw.text('Touch the nose\'s location', 9, 60, 20, '#000');
+      NosePoser.Draw.text('Touch the nose\'s location', 5, 60, 18, '#000');
 
       if(NosePoser.drawNose)
-        NosePoser.ctx.drawImage(NosePoser.noseImg, NosePoser.faceXPos+NosePoser.noseXOffset, NosePoser.faceYPos+NosePoser.noseYOffset,
+        NosePoser.ctx.drawImage(NosePoser.noseImg, NosePoser.noseXPos, NosePoser.noseYPos,
           NosePoser.noseWidth, NosePoser.noseHeight);
 
     },
@@ -220,8 +220,8 @@ angular
         this.x = (data.pageX - NosePoser.offset.left) / NosePoser.scale;
         this.y = (data.pageY - NosePoser.offset.top) / NosePoser.scale;
 
-        NosePoser.noseXOffset = this.x - NosePoser.faceXPos;
-        NosePoser.noseYOffset = this.y - NosePoser.faceYPos;
+        NosePoser.noseXPos = this.x - 55;
+        NosePoser.noseYPos = this.y - 68;
 
         NosePoser.drawNose = true;
 
