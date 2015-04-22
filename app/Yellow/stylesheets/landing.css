@@ -11,6 +11,19 @@
 	width: 13em;
 	position: absolute;
 	margin: 0;
+	bottom: 20%;
+	left: calc(50% - 6.5em);
+	margin-right: -50%;
+	
+	background: transparent;
+	border: none;
+
+}
+
+#uploadpic {
+	width: 13em;
+	position: absolute;
+	margin: 0;
 	bottom: 15%;
 	left: calc(50% - 6.5em);
 	margin-right: -50%;
@@ -29,9 +42,15 @@
 	/*text-align: center;
 	vertical-align: center;*/
 	width: 100%;
-	top: 1.5em;
+	top: 0.7em;
 	position: relative;
 	z-index: 1;
+}
+
+.uploadimg{
+	width: 100%;
+	top: 3.2em;
+	position: relative;
 }
 
 .startnose {
