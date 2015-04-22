@@ -57,6 +57,10 @@ angular
     fingerWidth: 15,
     fingerHeight: 15,
 
+    gameIsOver: 0,
+    continueGame: 0,
+    endGame: 0,
+
     nImages: 7,
     nLoadedImages: 0,
     handImg: new Image,
@@ -78,6 +82,7 @@ angular
     nFlipped: 0,
 
     snotBubbleImg: new Image,
+    splatImg: new Image,
 
 
     init: function() {
@@ -177,6 +182,12 @@ angular
         IckyPicky.maybeLoop();
       }
       IckyPicky.snotBubbleImg.src = '/images/bubble.png';
+
+      IckyPicky.splatImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.splatImg.src = '/images/splat.png'
 
 
 
@@ -317,8 +328,23 @@ angular
           IckyPicky.handPos -= IckyPicky.handRate;
       }
 
-      if(IckyPicky.heart == 0) {
-        window.alert("Game Over");
+      function gameOver(index) {
+        switch(index) {
+          case 2:
+            supersonic.ui.layers.pop();
+            break;
+          case 1:
+            break;
+        }
+          
+      }
+      if(IckyPicky.heart == 0 && IckyPicky.continueGame == 1) {
+        //window.alert("Game Over");
+        /*navigator.notification.confirm(
+          'Try Again?', 
+          gameOver,
+          'GAME OVER',
+          ['Yes', 'No']);*/       
         IckyPicky.heart = 3;
         IckyPicky.score = 0;
         IckyPicky.level = 1;
@@ -327,7 +353,20 @@ angular
         IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
         IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
         IckyPicky.handImg = IckyPicky.flippyFingerImg;
+        if(IckyPicky.faceRateFlag < 0) {
+          IckyPicky.faceRate = -1.0;
+        }
+        else {
+          IckyPicky.faceRateFlag = 1;
+          IckyPicky.faceRate = 1.0;
+        }
       }
+
+      if (IckyPicky.gameIsOver == 0 && IckyPicky.heart == 0) {
+         IckyPicky.gameIsOver = 1; 
+         IckyPicky.faceRate = 0;        
+      }
+      
 
       if(IckyPicky.handPos < -154) {
         IckyPicky.heart -= 1;
@@ -436,6 +475,10 @@ angular
       
     
       IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000');
+
+      if(IckyPicky.gameIsOver == 1) {
+         IckyPicky.ctx.drawImage(IckyPicky.splatImg, IckyPicky.faceXPos, IckyPicky.faceYPos, 200, 200);
+      }
 
     },
 
