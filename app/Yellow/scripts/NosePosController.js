@@ -46,13 +46,27 @@ angular
     noseHeight: 44,
     drawNose: false,
 
+    nImages: 2,
+    nLoadedImages: 0,
+
     noseImg: new Image,
     faceImg: new Image,
     
     userNewImage: new ParseImageObject(),
-    userImageLoaded: false,
 
     init: function() {
+
+
+      NoserPoser.noseImg.onload = function(){
+        NoserPoser.nLoadedImages += 1;
+        NoserPoser.maybeLoop();
+      }
+      NoserPoser.noseImg.src = '/images/nose.png';
+
+      NoserPoser.faceImg.onload = function() {
+        NoserPoser.nLoadedImages += 1;
+        NoserPoser.maybeLoop();
+      }
 
       // get an image
       navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
@@ -61,8 +75,7 @@ angular
 
       // save the image along with device id
       function onSuccess(imageData) {
-        NoserPoser.faceImg.src = imageData;
-        NoserPoser.userImageLoaded = true;
+        NoserPoser.faceImg.src = "data:image/jpeg;base64," + imageData;
 
         var bitmap = new Parse.File("someimage.jpg", {base64: "data:image/jpeg;base64," + imageData});
         NoserPoser.userNewImage.set('bitmap', bitmap);
@@ -102,13 +115,6 @@ angular
       // interact with the canvas api
       NoserPoser.ctx = NoserPoser.canvas.getContext('2d');
 
-
-      NoserPoser.noseImg.onload = function(){
-        NoserPoser.loop();
-      }
-      NoserPoser.noseImg.src = '/images/nose.png';
-
-
       // listen for clicks
       window.addEventListener('click', function(e) {
           e.preventDefault();
@@ -138,6 +144,12 @@ angular
       NoserPoser.resize();
     },
 
+    maybeLoop: function() {
+      if (NoserPoser.nLoadedImages == NoserPoser.nImages) {
+        NoserPoser.loop();
+      }
+    },
+
     loop: function() {
       requestAnimFrame( NoserPoser.loop );
 
@@ -157,9 +169,7 @@ angular
       NoserPoser.Draw.rect(0,NoserPoser.HEIGHT-45,NoserPoser.WIDTH,45, 'green');
 
       // draw the face images, and a reference green rec on the face
-      if (NoserPoser.imgLoaded) {
-        NoserPoser.ctx.drawImage(NoserPoser.faceImg, 0, 0, NoserPoser.WIDTH, NoserPoser.HEIGHT);
-      }
+      NoserPoser.ctx.drawImage(NoserPoser.faceImg, 0, 0, NoserPoser.WIDTH, NoserPoser.HEIGHT);
 
       NoserPoser.Draw.text('Touch the nose\'s location', 9, 60, 20, '#000');
 
