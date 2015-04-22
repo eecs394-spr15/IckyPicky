@@ -298,7 +298,8 @@ angular
             IckyPicky.faceRate = -1.0;
           }
           else {
-            IckyPicky.faceRateFlag = 1.0;
+            IckyPicky.faceRateFlag = 1;
+            IckyPicky.faceRate = 1.0;
           }
 
           IckyPicky.handImg = IckyPicky.flippyFingerImg;
@@ -343,7 +344,35 @@ angular
               break;
         }
 
+        /*
+        if (IckyPicky.nBubble < 100) {
+          IckyPicky.faceRate = 0;
+          switch(IckyPicky.nBubble % 50) {
+            case 0:
+                IckyPicky.handImg = IckyPicky.flippyFinger2Img;
+                IckyPicky.nFlipped += 1;
+                break;
+            case 25:
+                IckyPicky.handImg = IckyPicky.flippyFingerImg;
+                IckyPicky.nFlipped += 1;
+                break;
+            default:
+                IckyPicky.nFlipped += 1;
+                break;          
+          }
+        }
+        
+        else {
+          // face resumes moving with previous direction
+          if(IckyPicky.faceRateFlag < 0) {
+            IckyPicky.faceRate = -1.0;
+          }
+          else {
+            IckyPicky.faceRateFlag = 1.0;
+          }
+        }
 
+        */
 
         if(IckyPicky.heart != 0) {
           IckyPicky.handPos = 400;
@@ -372,6 +401,20 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
+      switch (IckyPicky.heart) {
+
+        case 2:
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 25, IckyPicky.faceYPos + IckyPicky.noseYOffset - 5, 50, 50);
+            break;
+        case 1:
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 40, IckyPicky.faceYPos + IckyPicky.noseYOffset - 20, 100, 100);
+            break;
+        case 0:
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 65, IckyPicky.faceYPos + IckyPicky.noseYOffset - 35, 150, 150);
+            break;
+      
+      }
+      
       
       switch(IckyPicky.level) {
         case 1:
