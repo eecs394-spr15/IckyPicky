@@ -36,10 +36,6 @@ angular
     ctx:  null,
 
     // variables for the face
-    faceXPos: 50,
-    faceYPos: 90,
-    faceHeight: 300,
-    faceWidth: 200,
     noseXOffset: 0,
     noseYOffset: 0,
     noseWidth: 38,
@@ -174,7 +170,7 @@ angular
       NoserPoser.Draw.text('Touch the nose\'s location', 9, 60, 20, '#000');
 
       if(NoserPoser.drawNose)
-        NoserPoser.ctx.drawImage(NoserPoser.noseImg, NoserPoser.faceXPos+NoserPoser.noseXOffset, NoserPoser.faceYPos+NoserPoser.noseYOffset,
+        NoserPoser.ctx.drawImage(NoserPoser.noseImg, NoserPoser.noseXOffset, NoserPoser.noseYOffset,
           NoserPoser.noseWidth, NoserPoser.noseHeight);
 
     },
@@ -256,8 +252,8 @@ angular
         this.x = (data.pageX - NoserPoser.offset.left) / NoserPoser.scale;
         this.y = (data.pageY - NoserPoser.offset.top) / NoserPoser.scale;
 
-        NoserPoser.noseXOffset = this.x - NoserPoser.faceXPos;
-        NoserPoser.noseYOffset = this.y - NoserPoser.faceYPos;
+        NoserPoser.noseXOffset = this.x;
+        NoserPoser.noseYOffset = this.y;
 
         NoserPoser.drawNose = true;
 
