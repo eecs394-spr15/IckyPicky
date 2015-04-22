@@ -23,7 +23,7 @@ module.exports =
 
   rootView:  
 
-     location: "Yellow#Yellow"
+     location: "geolocation#index"
 
      
   
