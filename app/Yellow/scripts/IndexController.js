@@ -169,7 +169,7 @@ angular
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
-      IckyPicky.flippyFinger2Img.src = '/images/finger_2.png';
+      IckyPicky.flippyFinger2Img.src = '/images/finger_3.png';
       IckyPicky.flippyFingerImg = IckyPicky.handImg;
 
       IckyPicky.snotBubbleImg.onload = function() {
