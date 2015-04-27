@@ -154,15 +154,23 @@ angular
       // this will create some extra space on the
       // page, allowing us to scroll past
       // the address bar, thus hiding it.
-      if (NosePoser.android || NosePoser.ios) {
+      //if (NosePoser.android || NosePoser.ios) {
         //document.body.style.height = (window.innerHeight + 50) + 'px';
-      }
+      //}
 
       // set the new canvas style width and height
       // note: our canvas is still 320 x 480, but
       // we're essentially scaling it with CSS
       NosePoser.canvas.style.width = NosePoser.currentWidth + 'px';
       NosePoser.canvas.style.height = NosePoser.currentHeight + 'px';
+
+      // the amount by which the css resized canvas
+      // is different to the actual (480x320) size.
+      NosePoser.scale = NosePoser.currentWidth / NosePoser.WIDTH;
+      // position of canvas in relation to
+      // the screen
+      NosePoser.offset.top = NosePoser.canvas.offsetTop;
+      NosePoser.offset.left = NosePoser.canvas.offsetLeft;
 
       // we use a timeout here because some mobile
       // browsers don't fire if there is not
@@ -220,8 +228,8 @@ angular
         this.x = (data.pageX - NosePoser.offset.left) / NosePoser.scale;
         this.y = (data.pageY - NosePoser.offset.top) / NosePoser.scale;
 
-        NosePoser.noseXPos = this.x - 55;
-        NosePoser.noseYPos = this.y - 68;
+        NosePoser.noseXPos = this.x - (NosePoser.noseWidth/2);
+        NosePoser.noseYPos = this.y - (NosePoser.noseHeight/2);
 
         NosePoser.drawNose = true;
 
