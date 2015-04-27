@@ -19,6 +19,7 @@ angular
   Parse.initialize("r0KuXabCgDMYoC1v62X0D5j3hyvDcEI2IDNSPRJM", "Cux3e19rL6sqTDRunw1WWJWbMAlpY1XYg3FsePFH");
   var ParseImageObject = Parse.Object.extend("image");
 
+
   var NoserPoser = {
 
     // set up some initial values
@@ -168,10 +169,11 @@ angular
       NoserPoser.ctx.drawImage(NoserPoser.faceImg, 0, 0, NoserPoser.WIDTH, NoserPoser.HEIGHT);
 
       NoserPoser.Draw.text('Touch the nose\'s location', 9, 60, 20, '#000');
+      //NoserPoser.Draw.text(NoserPoser.noseXOffset, 70, 80, 20, '#FFF');
+      //NoserPoser.Draw.text(NoserPoser.noseYOffset, 100, 80, 20, '#FFF');
 
-      if(NoserPoser.drawNose)
-        NoserPoser.ctx.drawImage(NoserPoser.noseImg, NoserPoser.noseXOffset, NoserPoser.noseYOffset,
-          NoserPoser.noseWidth, NoserPoser.noseHeight);
+      
+      NoserPoser.ctx.drawImage(NoserPoser.noseImg, NoserPoser.noseXOffset-NoserPoser.noseWidth/2,NoserPoser.noseYOffset-NoserPoser.noseHeight/2,NoserPoser.noseWidth, NoserPoser.noseHeight);
 
     },
 
@@ -195,6 +197,15 @@ angular
       // we're essentially scaling it with CSS
       NoserPoser.canvas.style.width = NoserPoser.currentWidth + 'px';
       NoserPoser.canvas.style.height = NoserPoser.currentHeight + 'px';
+      
+      // the amount by which the css resized canvas
+      // is different to the actual (480x320) size.
+      NoserPoser.scale = NoserPoser.currentWidth / NoserPoser.WIDTH;
+      // position of canvas in relation to
+      // the screen
+      NoserPoser.offset.top = NoserPoser.canvas.offsetTop;
+      NoserPoser.offset.left = NoserPoser.canvas.offsetLeft;
+
 
       // we use a timeout here because some mobile
       // browsers don't fire if there is not
@@ -243,6 +254,8 @@ angular
     }
 	};
 
+
+
   NoserPoser.Input = {
 
     x: 0,
@@ -252,12 +265,23 @@ angular
         this.x = (data.pageX - NoserPoser.offset.left) / NoserPoser.scale;
         this.y = (data.pageY - NoserPoser.offset.top) / NoserPoser.scale;
 
+
+
+
         NoserPoser.noseXOffset = this.x;
         NoserPoser.noseYOffset = this.y;
 
-        NoserPoser.drawNose = true;
-
+        //NoserPoser.drawNose = true;
+        
         NoserPoser.render();
+
+        var confirmPos=confirm("Is this the right nose position?");
+
+        if(confirmPos){
+          alert("Nose pos "+this.x+" "+this.y);
+        }
+
+        
       }
   };
 //steroids.view.setBackgroundImage("/img/space-background.png");
