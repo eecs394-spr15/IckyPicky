@@ -432,6 +432,7 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
+
       
       switch(IckyPicky.level) {
         case 1:
