@@ -37,6 +37,10 @@ angular
     ctx:  null,
 
     // variables for the face
+    faceXPos: 50,
+    faceYPos: 90,
+    faceHeight: 300,
+    faceWidth: 200,
     noseXOffset: 0,
     noseYOffset: 0,
     noseWidth: 38,
@@ -50,6 +54,8 @@ angular
     faceImg: new Image,
     
     userNewImage: new ParseImageObject(),
+
+    ParseImgData: null,
 
     init: function() {
 
@@ -73,7 +79,8 @@ angular
       // save the image along with device id
       function onSuccess(imageData) {
         NoserPoser.faceImg.src = "data:image/jpeg;base64," + imageData;
-
+        NoserPoser.ParseImgData = imageData;
+/*
         var bitmap = new Parse.File("someimage.jpg", {base64: "data:image/jpeg;base64," + imageData});
         NoserPoser.userNewImage.set('bitmap', bitmap);
         NoserPoser.userNewImage.set('deviceid', device.uuid);
@@ -89,6 +96,7 @@ angular
             alert('Failed to create new image, with error code: ' + error.message);
           }
         });
+*/
       }
 
       function onFail(message) {
@@ -166,7 +174,7 @@ angular
       NoserPoser.Draw.rect(0,NoserPoser.HEIGHT-45,NoserPoser.WIDTH,45, 'green');
 
       // draw the face images, and a reference green rec on the face
-      NoserPoser.ctx.drawImage(NoserPoser.faceImg, 0, 0, NoserPoser.WIDTH, NoserPoser.HEIGHT);
+      NoserPoser.ctx.drawImage(NoserPoser.faceImg, NoserPoser.faceXPos, NoserPoser.faceYPos, NoserPoser.faceWidth, NoserPoser.faceHeight);
 
       NoserPoser.Draw.text('Touch the nose\'s location', 9, 60, 20, '#000');
       //NoserPoser.Draw.text(NoserPoser.noseXOffset, 70, 80, 20, '#FFF');
@@ -278,7 +286,24 @@ angular
         var confirmPos=confirm("Is this the right nose position?");
 
         if(confirmPos){
-          alert("Nose pos "+this.x+" "+this.y);
+         // alert("Nose pos "+this.x+" "+this.y);
+          var bitmap = new Parse.File("someimage.jpg", {base64: "data:image/jpeg;base64," + NoserPoser.ParseImgData});
+          NoserPoser.userNewImage.set('bitmap', bitmap);
+          NoserPoser.userNewImage.set('deviceid', device.uuid);
+          NoserPoser.userNewImage.set('noseXPos',this.x);
+          NoserPoser.userNewImage.set('noseYPos',this.y);
+
+          NoserPoser.userNewImage.save(null, {  
+            success: function(userNewImage) {
+            // Execute any logic that should take place after the object is saved.
+              alert('New image created with objectId: ' + NoserPoser.userNewImage.id);
+            },
+            error: function(image, error) {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+              alert('Failed to create new image, with error code: ' + error.message);
+            }
+          });
         }
 
         
