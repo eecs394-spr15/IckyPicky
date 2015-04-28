@@ -116,37 +116,37 @@ angular
       query.equalTo("deviceid", device.uuid);
       query.find({
         success: function(results) {
-          alert("Successfully retrieved " + results.length + " scores.");
+          alert("Successfully retrieved " + results.length + " images.");
           // Do something with the returned Parse.Object values
           IckyPicky.allImages = results;
           IckyPicky.nDatabaseImages = results.length;
+
+          IckyPicky.currentFaceImg.onload = function() {
+            IckyPicky.nLoadedImages += 1;
+            IckyPicky.maybeLoop();
+          }
+          // set the initial face for first level
+          if (IckyPicky.nDatabaseImages > 0)
+          {
+            IckyPicky.currentFaceImg.src = IckyPicky.allImages[0].get('bitmap');
+          } else {
+            IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
+          }
+
+          IckyPicky.nextFaceImg.onload = function() {
+            IckyPicky.nextFaceLoaded = true;
+          }
+          if (IckyPicky.nDatabaseImages > 1)
+          {
+            IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap');
+          } else {
+            IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
+          }
         },
         error: function(error) {
           alert("Error: " + error.code + " " + error.message);
         }
       });
-
-      IckyPicky.currentFaceImg.onload = function() {
-        IckyPicky.nLoadedImages += 1;
-        IckyPicky.maybeLoop();
-      }
-      // set the initial face for first level
-      if (IckyPicky.nDatabaseImages > 0)
-      {
-        IckyPicky.currentFaceImg.src = IckyPicky.allImages[0].get('bitmap');
-      } else {
-        IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
-      }
-
-      IckyPicky.nextFaceImg.onload = function() {
-        IckyPicky.nextFaceLoaded = true;
-      }
-      if (IckyPicky.nDatabaseImages > 1)
-      {
-        IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap');
-      } else {
-        IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
-      }
 
 
       // the proportion of width to height
