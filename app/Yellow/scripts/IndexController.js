@@ -457,9 +457,7 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
-<<<<<<< HEAD
 
-=======
       switch (IckyPicky.heart) {
 
         case 2:
@@ -473,8 +471,6 @@ angular
             break;
       
       }
-      
->>>>>>> 7e7ece128a18eb62b852772f5d044798628e1d4f
       
       switch(IckyPicky.level) {
         case 1:
