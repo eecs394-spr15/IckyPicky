@@ -5,6 +5,9 @@ angular
     
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating
     // shim layer with setTimeout fallback
+
+  Parse.initialize("r0KuXabCgDMYoC1v62X0D5j3hyvDcEI2IDNSPRJM", "Cux3e19rL6sqTDRunw1WWJWbMAlpY1XYg3FsePFH");
+
   window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       || 
             window.webkitRequestAnimationFrame || 
@@ -62,6 +65,7 @@ angular
     endGame: 0,
 
     nImages: 13,
+
     nLoadedImages: 0,
     handImg: new Image,
     arisaFaceImg: new Image,
@@ -70,6 +74,9 @@ angular
     bingFaceImg: new Image,
     obamaFaceImg: new Image,
     currentFaceImg: new Image,
+
+    // BACKEND: this will store the next face image
+    nextFaceImg: new Image,
 
     heartZeroImg: new Image,
     heartOneImg: new Image,
@@ -86,7 +93,31 @@ angular
 
 
     init: function() {
+      // BACKEND: here hit parse for all the images a user has
+      // and save it in some variable
+      //
+      // see this for how to do it
+      // https://parse.com/docs/js_guide#queries-basic
+      //
+      // our class is called "image"
+      // it has columns
+      //  - bitmap
+      //  - deviceid
+      //  - noseXPos (0 to 1)
+      //  - noseYPos (0 to 1)
 
+      // var GameScore = Parse.Object.extend("image");
+      //
+      // once you have a list of objects
+      // get the first one. take the bitmap column and set it as
+      // image source for currentImg
+      // IckyPicky.currentFaceImg.src = imageObject('bitmap') <- this might not be how you access bitmap column, look it up
+      //
+      // also get the second image and set that as nextFaceImg source
+
+      // you will also want to have some variables like noseYoffset
+      // and noseXOffset set from the object columns and use those
+      // to draw the nose
 
       // the proportion of width to height
       IckyPicky.RATIO = IckyPicky.WIDTH / IckyPicky.HEIGHT;
@@ -255,31 +286,57 @@ angular
         switch(IckyPicky.level) {
           case 1:
               if(IckyPicky.score == 5) {
-                IckyPicky.currentFaceImg = IckyPicky.jonFaceImg;
+                IckyPicky.currentFaceImg = IckyPicky.jonFaceImg; // BACKEND: currentFaceImg = nextFaceImg
                 IckyPicky.level += 1;
+                // BACKEND: here start loading the next image
+                // on your list of objects you got from parse
+                // nextFaceImg.src = bitmap from parse
+                //
+                // get the next one and increment the counter
+
               }
               break;
           case 2:
               if(IckyPicky.score == 10) {
                 IckyPicky.currentFaceImg = IckyPicky.elsieFaceImg;
                 IckyPicky.level += 1;
+                // BACKEND: here start loading the next image
+                // on your list of objects you got from parse
+                // nextFaceImg.src = bitmap from parse
+                //
+                // get the next one and increment the counter
               }
               break;
           case 3:
               if(IckyPicky.score == 15) {
                 IckyPicky.currentFaceImg = IckyPicky.bingFaceImg;
                 IckyPicky.level += 1;
+                // BACKEND: here start loading the next image
+                // on your list of objects you got from parse
+                // nextFaceImg.src = bitmap from parse
+                //
+                // get the next one and increment the counter
               }
               break;
           case 4:
               if(IckyPicky.score == 20) {
                 IckyPicky.currentFaceImg = IckyPicky.obamaFaceImg;
                 IckyPicky.level += 1;
+                // BACKEND: here start loading the next image
+                // on your list of objects you got from parse
+                // nextFaceImg.src = bitmap from parse
+                //
+                // get the next one and increment the counter
               }
               break;
           case 5:
               if(IckyPicky.score == 25) {
                 IckyPicky.level += 1;
+                // BACKEND: here start loading the next image
+                // on your list of objects you got from parse
+                // nextFaceImg.src = bitmap from parse
+                //
+                // get the next one and increment the counter
               }
               break;
         }
@@ -477,6 +534,7 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 119, 11, 58, 19);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
+
       switch (IckyPicky.heart) {
 
         case 2:
@@ -490,7 +548,6 @@ angular
             break;
       
       }
-      
       
       switch(IckyPicky.level) {
         case 1:
