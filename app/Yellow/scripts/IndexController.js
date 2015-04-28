@@ -49,8 +49,8 @@ angular
     faceRateFlag: 1,
     noseXOffset: 100,
     noseYOffset: 150,
-    noseWidth: 15,
-    noseHeight: 15,
+    noseWidth: 38,
+    noseHeight: 44,
 
     // varibles for the hand
     handPos: 400,
@@ -93,31 +93,7 @@ angular
 
 
     init: function() {
-      // BACKEND: here hit parse for all the images a user has
-      // and save it in some variable
-      //
-      // see this for how to do it
-      // https://parse.com/docs/js_guide#queries-basic
-      //
-      // our class is called "image"
-      // it has columns
-      //  - bitmap
-      //  - deviceid
-      //  - noseXPos (0 to 1)
-      //  - noseYPos (0 to 1)
 
-      // var GameScore = Parse.Object.extend("image");
-      //
-      // once you have a list of objects
-      // get the first one. take the bitmap column and set it as
-      // image source for currentImg
-      // IckyPicky.currentFaceImg.src = imageObject('bitmap') <- this might not be how you access bitmap column, look it up
-      //
-      // also get the second image and set that as nextFaceImg.src
-
-      // you will also want to have some variables like noseYoffset
-      // and noseXOffset set from the object columns and use those
-      // to draw the nose
       var query = new Parse.Query(ParseImageObject);
       query.equalTo("deviceid", device.uuid);
       query.find({
@@ -134,7 +110,13 @@ angular
           // set the initial face for first level
           if (IckyPicky.nDatabaseImages > 0)
           {
-            IckyPicky.currentFaceImg.src = IckyPicky.allImages[0].get('bitmap');
+          //console.log(IckyPicky.allImages[0].get('bitmap')._url);
+            IckyPicky.currentFaceImg.src = IckyPicky.allImages[0].get('bitmap')._url;
+            IckyPicky.noseXOffset = IckyPicky.allImages[0].get('noseXPos');
+            console.log(IckyPicky.noseXOffset);
+
+            IckyPicky.noseYOffset = IckyPicky.allImages[0].get('noseYPos');
+            console.log(IckyPicky.noseYOffset);
           } else {
             IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
           }
@@ -144,8 +126,9 @@ angular
           }
           if (IckyPicky.nDatabaseImages > 1)
           {
-            IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap');
+            IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap')._url;
           } else {
+            IckyPicky.nextFaceLoaded = true;
             IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
           }
         },
@@ -174,19 +157,20 @@ angular
       IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
 
       // load images
+      
       IckyPicky.handImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
       IckyPicky.handImg.src = '/images/finger.png';
-
+      
 
       IckyPicky.arisaFaceImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
       IckyPicky.arisaFaceImg.src = '/images/arisaface.png';
-
+      
       IckyPicky.jonFaceImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
@@ -255,6 +239,7 @@ angular
       }
       IckyPicky.snotBubbleImg.src = '/images/bubble.png';
 
+      
 
       // listen for clicks
       window.addEventListener('click', function(e) {
@@ -298,12 +283,13 @@ angular
         IckyPicky.faceRateFlag = IckyPicky.faceRateFlag * -1;
       }
       IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
+      IckyPicky.noseXOffset += IckyPicky.faceRate * IckyPicky.level * 0.5;
 
       var nose = {
-        left: IckyPicky.noseXOffset + IckyPicky.faceXPos,
-        right: IckyPicky.noseXOffset + IckyPicky.faceXPos + IckyPicky.noseWidth,
-        top: IckyPicky.faceYPos + IckyPicky.noseYOffset,
-        bottom: IckyPicky.faceYPos + IckyPicky.noseYOffset + IckyPicky.noseHeight
+        left: IckyPicky.noseXOffset,
+        right: IckyPicky.noseXOffset + IckyPicky.noseWidth,
+        top: IckyPicky.noseYOffset,
+        bottom: IckyPicky.noseYOffset + IckyPicky.noseHeight
       };
       
       var finger = {
@@ -321,10 +307,10 @@ angular
           case 1: // moving on to level 2
               if(IckyPicky.score == 5 && IckyPicky.nextFaceLoaded) {
                 IckyPicky.currentFaceImg = IckyPicky.nextFaceImg;
+                IckyPicky.nextFaceLoaded = false;
                 if (IckyPicky.nDatabaseImages > 2)
                 {
-                  IckyPicky.nextFaceLoaded = false
-                  IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap'); 
+                  IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap')._url; 
                 } else {
                   IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
                 }
@@ -500,9 +486,10 @@ angular
 
       // draw the face images, and a reference green rec on the face
       IckyPicky.ctx.drawImage(IckyPicky.currentFaceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
+      
       IckyPicky.ctx.drawImage(IckyPicky.noseImg,
-                              IckyPicky.faceXPos + IckyPicky.noseXOffset,
-                              IckyPicky.faceYPos + IckyPicky.noseYOffset,
+                              IckyPicky.noseXOffset,
+                              IckyPicky.noseYOffset,
                               IckyPicky.noseWidth,
                               IckyPicky.noseHeight);
       
@@ -518,13 +505,13 @@ angular
       switch (IckyPicky.heart) {
 
         case 2:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 25, IckyPicky.faceYPos + IckyPicky.noseYOffset - 5, 50, 50);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.noseXOffset - 25, IckyPicky.noseYOffset - 5, 50, 50);
             break;
         case 1:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 40, IckyPicky.faceYPos + IckyPicky.noseYOffset - 20, 100, 100);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.noseXOffset - 40, IckyPicky.noseYOffset - 20, 100, 100);
             break;
         case 0:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 65, IckyPicky.faceYPos + IckyPicky.noseYOffset - 35, 150, 150);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.noseXOffset - 65, IckyPicky.noseYOffset - 35, 150, 150);
             break;
       
       }
