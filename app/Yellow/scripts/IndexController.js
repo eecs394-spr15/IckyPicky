@@ -61,7 +61,7 @@ angular
     continueGame: 0,
     endGame: 0,
 
-    nImages: 7,
+    nImages: 13,
     nLoadedImages: 0,
     handImg: new Image,
     arisaFaceImg: new Image,
@@ -187,7 +187,7 @@ angular
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
-      IckyPicky.splatImg.src = '/images/splat.png'
+      IckyPicky.splatImg.src = '/images/paigeface.png'
 
 
 
@@ -284,7 +284,7 @@ angular
               break;
         }
 
-    }
+      }
 
       if (IckyPicky.hit) {
 
@@ -293,6 +293,7 @@ angular
           switch(IckyPicky.nFlipped % 50) {
             case 0:
                 IckyPicky.handImg = IckyPicky.flippyFinger2Img;
+  
                 IckyPicky.nFlipped += 1;
                 break;
             case 25:
@@ -324,10 +325,59 @@ angular
 
       }
 
-      if (IckyPicky.Input.tapped && IckyPicky.handPos > -155 && !IckyPicky.hit) {
-          IckyPicky.handPos -= IckyPicky.handRate;
+      if(IckyPicky.handPos < -154) {
+        IckyPicky.heart -= 1;
+        switch(IckyPicky.heart) {
+          case 2:
+              IckyPicky.currentHeartImg = IckyPicky.heartTwoImg;
+              break;
+          case 1:
+              IckyPicky.currentHeartImg = IckyPicky.heartOneImg;
+              break;
+          case 0:
+              IckyPicky.currentHeartImg = IckyPicky.heartZeroImg;
+              break;
+        }
+        
+
+        if(IckyPicky.heart != 0) {
+          IckyPicky.handPos = 400;
+          IckyPicky.Input.tapped = false;
+        }
+
+        if (IckyPicky.gameIsOver == 0 && IckyPicky.heart == 0) {
+         IckyPicky.gameIsOver = 1; 
+         IckyPicky.faceRate = 0;        
+        }
       }
 
+
+      if (IckyPicky.Input.tapped && IckyPicky.handPos > -155 && !IckyPicky.hit) {
+          if(IckyPicky.gameIsOver != 1) {
+            IckyPicky.handPos -= IckyPicky.handRate;
+          }
+          else {
+            IckyPicky.heart = 3;
+            IckyPicky.score = 0;
+            IckyPicky.level = 1;
+            IckyPicky.handPos = 400;
+            IckyPicky.Input.tapped = false;
+            IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
+            IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
+            IckyPicky.handImg = IckyPicky.flippyFingerImg;
+            if(IckyPicky.faceRateFlag < 0) {
+              IckyPicky.faceRate = -1.0;
+            }
+            else {
+              IckyPicky.faceRateFlag = 1;
+              IckyPicky.faceRate = 1.0;
+            }
+            IckyPicky.gameIsOver = 0;
+          }
+
+      }
+
+      /*
       function gameOver(index) {
         switch(index) {
           case 2:
@@ -336,15 +386,19 @@ angular
           case 1:
             break;
         }
-          
       }
+      */
+
+      
+
+      /*
       if(IckyPicky.heart == 0 && IckyPicky.continueGame == 1) {
         //window.alert("Game Over");
-        /*navigator.notification.confirm(
+        navigator.notification.confirm(
           'Try Again?', 
           gameOver,
           'GAME OVER',
-          ['Yes', 'No']);*/       
+          ['Yes', 'No']);      
         IckyPicky.heart = 3;
         IckyPicky.score = 0;
         IckyPicky.level = 1;
@@ -361,27 +415,13 @@ angular
           IckyPicky.faceRate = 1.0;
         }
       }
+      */
 
-      if (IckyPicky.gameIsOver == 0 && IckyPicky.heart == 0) {
-         IckyPicky.gameIsOver = 1; 
-         IckyPicky.faceRate = 0;        
-      }
+  
+
       
 
-      if(IckyPicky.handPos < -154) {
-        IckyPicky.heart -= 1;
 
-        switch(IckyPicky.heart) {
-          case 2:
-              IckyPicky.currentHeartImg = IckyPicky.heartTwoImg;
-              break;
-          case 1:
-              IckyPicky.currentHeartImg = IckyPicky.heartOneImg;
-              break;
-          case 0:
-              IckyPicky.currentHeartImg = IckyPicky.heartZerImg;
-              break;
-        }
 
         /*
         if (IckyPicky.nBubble < 100) {
@@ -413,11 +453,8 @@ angular
 
         */
 
-        if(IckyPicky.heart != 0) {
-          IckyPicky.handPos = 400;
-          IckyPicky.Input.tapped = false;
-        }
-      } 
+
+      
     },
 
     // this is where we draw all the entities
@@ -435,9 +472,9 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
 
       // draw the score board
-      IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 5, 25, 16, '#000');
+      IckyPicky.Draw.text('score:' + IckyPicky.score.toString(), 10, 25, 18, '#000');
 
-      IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
+      IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 119, 11, 58, 19);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
       switch (IckyPicky.heart) {
@@ -457,28 +494,29 @@ angular
       
       switch(IckyPicky.level) {
         case 1:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000000');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 207, 25, 18, '#000000');
             break;
         case 2:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#0000FF');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 207, 25, 16, '#0000FF');
             break;
         case 3:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#00BFFF');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 207, 25, 16, '#00BFFF');
             break;
         case 4:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#32CD32');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 207, 25, 16, '#32CD32');
             break;
         case 5:
-            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#B22222');
+            IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 207, 25, 16, '#B22222');
             break;
       }
       
-    
-      IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000');
 
+
+      
       if(IckyPicky.gameIsOver == 1) {
-         IckyPicky.ctx.drawImage(IckyPicky.splatImg, IckyPicky.faceXPos, IckyPicky.faceYPos, 200, 200);
+        IckyPicky.ctx.drawImage(IckyPicky.splatImg, IckyPicky.faceXPos - 50, IckyPicky.faceYPos + 60, 150, 150);
       }
+      
 
     },
 
