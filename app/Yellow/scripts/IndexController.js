@@ -187,7 +187,7 @@ angular
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
-      IckyPicky.splatImg.src = '/images/paigeface.png'
+      IckyPicky.splatImg.src = '/images/green-splat.png'
 
 
 
@@ -514,7 +514,7 @@ angular
 
       
       if(IckyPicky.gameIsOver == 1) {
-        IckyPicky.ctx.drawImage(IckyPicky.splatImg, IckyPicky.faceXPos - 50, IckyPicky.faceYPos + 60, 150, 150);
+        IckyPicky.ctx.drawImage(IckyPicky.splatImg, IckyPicky.faceXPos - 5, IckyPicky.faceYPos + 20, 220, 220);
       }
       
 
