@@ -45,6 +45,7 @@ angular
     faceRate: 1.0,
     faceHeight: 300,
     faceWidth: 200,
+    faceRateFlag: 1,
     noseXOffset: 100,
     noseYOffset: 150,
     noseWidth: 15,
@@ -78,7 +79,12 @@ angular
     heartFullImg: new Image,
     currentHeartImg: new Image,
 
-    firstTouch: false,
+    flippyFingerImg: new Image,
+    flippyFinger2Img: new Image,
+    nFlipped: 0,
+
+    snotBubbleImg: new Image,
+
 
     init: function() {
       // BACKEND: here hit parse for all the images a user has
@@ -189,7 +195,18 @@ angular
       }
       IckyPicky.heartFullImg.src = '/images/heart_full.png';
 
-      
+      IckyPicky.flippyFinger2Img.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.flippyFinger2Img.src = '/images/finger_3.png';
+      IckyPicky.flippyFingerImg = IckyPicky.handImg;
+
+      IckyPicky.snotBubbleImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.snotBubbleImg.src = '/images/bubble.png';
 
 
 
@@ -232,6 +249,7 @@ angular
 
       if ( (IckyPicky.faceXPos < -40 && !IckyPicky.hit) || (IckyPicky.faceXPos > IckyPicky.WIDTH - IckyPicky.faceWidth + 10 && !IckyPicky.hit)) {
         IckyPicky.faceRate = IckyPicky.faceRate * -1;
+        IckyPicky.faceRateFlag = IckyPicky.faceRateFlag * -1;
       }
       IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
 
@@ -314,10 +332,41 @@ angular
     }
 
       if (IckyPicky.hit) {
-        IckyPicky.handPos = 400;
-        IckyPicky.hit = false;
-        IckyPicky.Input.tapped = false;
-        IckyPicky.score += 1;
+
+        if(IckyPicky.nFlipped < 100) {
+          IckyPicky.faceRate = 0;
+          switch(IckyPicky.nFlipped % 50) {
+            case 0:
+                IckyPicky.handImg = IckyPicky.flippyFinger2Img;
+                IckyPicky.nFlipped += 1;
+                break;
+            case 25:
+                IckyPicky.handImg = IckyPicky.flippyFingerImg;
+                IckyPicky.nFlipped += 1;
+                break;
+            default:
+                IckyPicky.nFlipped += 1;
+                break;
+          }
+        }
+        else {
+          if(IckyPicky.faceRateFlag < 0) {
+            IckyPicky.faceRate = -1.0;
+          }
+          else {
+            IckyPicky.faceRateFlag = 1;
+            IckyPicky.faceRate = 1.0;
+          }
+
+          IckyPicky.handImg = IckyPicky.flippyFingerImg;
+          IckyPicky.nFlipped = 0; 
+          IckyPicky.handPos = 400;
+          IckyPicky.hit = false;
+          IckyPicky.Input.tapped = false;
+          IckyPicky.score += 1;
+
+        }
+
       }
 
       if (IckyPicky.Input.tapped && IckyPicky.handPos > -155 && !IckyPicky.hit) {
@@ -333,6 +382,7 @@ angular
         IckyPicky.Input.tapped = false;
         IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
         IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
+        IckyPicky.handImg = IckyPicky.flippyFingerImg;
       }
 
       if(IckyPicky.handPos < -154) {
@@ -349,6 +399,36 @@ angular
               IckyPicky.currentHeartImg = IckyPicky.heartZerImg;
               break;
         }
+
+        /*
+        if (IckyPicky.nBubble < 100) {
+          IckyPicky.faceRate = 0;
+          switch(IckyPicky.nBubble % 50) {
+            case 0:
+                IckyPicky.handImg = IckyPicky.flippyFinger2Img;
+                IckyPicky.nFlipped += 1;
+                break;
+            case 25:
+                IckyPicky.handImg = IckyPicky.flippyFingerImg;
+                IckyPicky.nFlipped += 1;
+                break;
+            default:
+                IckyPicky.nFlipped += 1;
+                break;          
+          }
+        }
+        
+        else {
+          // face resumes moving with previous direction
+          if(IckyPicky.faceRateFlag < 0) {
+            IckyPicky.faceRate = -1.0;
+          }
+          else {
+            IckyPicky.faceRateFlag = 1.0;
+          }
+        }
+
+        */
 
         if(IckyPicky.heart != 0) {
           IckyPicky.handPos = 400;
@@ -377,7 +457,24 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.currentHeartImg, 5, 30, 54, 17);
       //      IckyPicky.Draw.text('heart:' + IckyPicky.heart.toString(), 5, 50, 12, '#000');
 
+<<<<<<< HEAD
 
+=======
+      switch (IckyPicky.heart) {
+
+        case 2:
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 25, IckyPicky.faceYPos + IckyPicky.noseYOffset - 5, 50, 50);
+            break;
+        case 1:
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 40, IckyPicky.faceYPos + IckyPicky.noseYOffset - 20, 100, 100);
+            break;
+        case 0:
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.faceXPos + IckyPicky.noseXOffset - 65, IckyPicky.faceYPos + IckyPicky.noseYOffset - 35, 150, 150);
+            break;
+      
+      }
+      
+>>>>>>> 7e7ece128a18eb62b852772f5d044798628e1d4f
       
       switch(IckyPicky.level) {
         case 1:
@@ -399,12 +496,6 @@ angular
       
     
       IckyPicky.Draw.text('level:' + IckyPicky.level.toString(), 5, 60, 16, '#000');
-
-      // Draw the tutorial
-      if(!IckyPicky.firstTouch){
-        IckyPicky.Draw.text('Tap the finger,', 70, 80, 20, '#090');
-        IckyPicky.Draw.text('Pick the nose!', 80, 350, 20, '#090');
-      }
 
     },
 
@@ -499,7 +590,6 @@ angular
         this.x = (data.pageX - IckyPicky.offset.left) / IckyPicky.scale;
         this.y = (data.pageY - IckyPicky.offset.top) / IckyPicky.scale;
         this.tapped = true;
-        IckyPicky.firstTouch = true;
     }
   };
 
