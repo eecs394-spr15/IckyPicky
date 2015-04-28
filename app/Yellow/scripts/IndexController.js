@@ -7,6 +7,7 @@ angular
     // shim layer with setTimeout fallback
 
   Parse.initialize("r0KuXabCgDMYoC1v62X0D5j3hyvDcEI2IDNSPRJM", "Cux3e19rL6sqTDRunw1WWJWbMAlpY1XYg3FsePFH");
+  var ParseImageObject = Parse.Object.extend("image");
 
   window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       || 
@@ -59,7 +60,7 @@ angular
     fingerWidth: 15,
     fingerHeight: 15,
 
-    nImages: 10,
+    nImages: 12,
     nLoadedImages: 0,
     handImg: new Image,
     arisaFaceImg: new Image,
@@ -68,9 +69,14 @@ angular
     bingFaceImg: new Image,
     obamaFaceImg: new Image,
     currentFaceImg: new Image,
+    noseImg: new Image,
 
     // BACKEND: this will store the next face image
     nextFaceImg: new Image,
+    allImages: null,
+    imageIndex: 0,
+    nDatabaseImages: null,
+    nextFaceLoaded: false,
 
     heartZeroImg: new Image,
     heartOneImg: new Image,
@@ -101,11 +107,47 @@ angular
       // image source for currentImg
       // IckyPicky.currentFaceImg.src = imageObject('bitmap') <- this might not be how you access bitmap column, look it up
       //
-      // also get the second image and set that as nextFaceImg source
+      // also get the second image and set that as nextFaceImg.src
 
       // you will also want to have some variables like noseYoffset
       // and noseXOffset set from the object columns and use those
       // to draw the nose
+      var query = new Parse.Query(ParseImageObject);
+      query.equalTo("deviceid", device.uuid);
+      query.find({
+        success: function(results) {
+          alert("Successfully retrieved " + results.length + " scores.");
+          // Do something with the returned Parse.Object values
+          IckyPicky.allImages = results;
+          IckyPicky.nDatabaseImages = results.length;
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });
+
+      IckyPicky.currentFaceImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      // set the initial face for first level
+      if (IckyPicky.nDatabaseImages > 0)
+      {
+        IckyPicky.currentFaceImg.src = IckyPicky.allImages[0].get('bitmap');
+      } else {
+        IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
+      }
+
+      IckyPicky.nextFaceImg.onload = function() {
+        IckyPicky.nextFaceLoaded = true;
+      }
+      if (IckyPicky.nDatabaseImages > 1)
+      {
+        IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap');
+      } else {
+        IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
+      }
+
 
       // the proportion of width to height
       IckyPicky.RATIO = IckyPicky.WIDTH / IckyPicky.HEIGHT;
@@ -123,8 +165,6 @@ angular
       // interact with the canvas api
       IckyPicky.ctx = IckyPicky.canvas.getContext('2d');
 
-      // set initial face for first level
-      IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
       IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
 
       // load images
@@ -189,8 +229,11 @@ angular
       }
       IckyPicky.heartFullImg.src = '/images/heart_full.png';
 
-      
-
+      IckyPicky.noseImg.onload = function() {
+        IckyPicky.nLoadedImages += 1;
+        IckyPicky.maybeLoop();
+      }
+      IckyPicky.noseImg.src = '/images/nose.png';
 
 
       // listen for clicks
@@ -254,9 +297,16 @@ angular
       if(IckyPicky.level <= IckyPicky.allLevel) { 
 
         switch(IckyPicky.level) {
-          case 1:
-              if(IckyPicky.score == 5) {
-                IckyPicky.currentFaceImg = IckyPicky.jonFaceImg; // BACKEND: currentFaceImg = nextFaceImg
+          case 1: // moving on to level 2
+              if(IckyPicky.score == 5 && IckyPicky.nextFaceLoaded) {
+                IckyPicky.currentFaceImg = IckyPicky.nextFaceImg;
+                if (IckyPicky.nDatabaseImages > 2)
+                {
+                  IckyPicky.nextFaceLoaded = false
+                  IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap'); 
+                } else {
+                  IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
+                }
                 IckyPicky.level += 1;
                 // BACKEND: here start loading the next image
                 // on your list of objects you got from parse
@@ -266,8 +316,8 @@ angular
 
               }
               break;
-          case 2:
-              if(IckyPicky.score == 10) {
+          case 2: // moving on to level 3
+              if(IckyPicky.score == 10 && IckyPicky.nextFaceLoaded) {
                 IckyPicky.currentFaceImg = IckyPicky.elsieFaceImg;
                 IckyPicky.level += 1;
                 // BACKEND: here start loading the next image
@@ -278,7 +328,7 @@ angular
               }
               break;
           case 3:
-              if(IckyPicky.score == 15) {
+              if(IckyPicky.score == 15 && IckyPicky.nextFaceLoaded) {
                 IckyPicky.currentFaceImg = IckyPicky.bingFaceImg;
                 IckyPicky.level += 1;
                 // BACKEND: here start loading the next image
@@ -289,7 +339,7 @@ angular
               }
               break;
           case 4:
-              if(IckyPicky.score == 20) {
+              if(IckyPicky.score == 20 && IckyPicky.nextFaceLoaded) {
                 IckyPicky.currentFaceImg = IckyPicky.obamaFaceImg;
                 IckyPicky.level += 1;
                 // BACKEND: here start loading the next image
@@ -300,7 +350,7 @@ angular
               }
               break;
           case 5:
-              if(IckyPicky.score == 25) {
+              if(IckyPicky.score == 25 && IckyPicky.nextFaceLoaded) {
                 IckyPicky.level += 1;
                 // BACKEND: here start loading the next image
                 // on your list of objects you got from parse
@@ -367,7 +417,12 @@ angular
 
       // draw the face images, and a reference green rec on the face
       IckyPicky.ctx.drawImage(IckyPicky.currentFaceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
-
+      IckyPicky.ctx.drawImage(IckyPicky.noseImg,
+                              IckyPicky.faceXPos + IckyPicky.noseXOffset,
+                              IckyPicky.faceYPos + IckyPicky.noseYOffset,
+                              IckyPicky.noseWidth,
+                              IckyPicky.noseHeight);
+      
       // draw the finger images, and a reference green rec on the finger
       IckyPicky.ctx.drawImage(IckyPicky.handImg, IckyPicky.handXOffset, IckyPicky.handPos, 70, 150);
 
