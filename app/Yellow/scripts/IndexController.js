@@ -98,15 +98,80 @@ angular
       query.equalTo("deviceid", device.uuid);
       query.find({
         success: function(results) {
-          alert("Successfully retrieved " + results.length + " images.");
           // Do something with the returned Parse.Object values
           IckyPicky.allImages = results;
-          IckyPicky.nDatabaseImages = results.length;
+          var nResults = results.length;
 
           IckyPicky.currentFaceImg.onload = function() {
             IckyPicky.nLoadedImages += 1;
             IckyPicky.maybeLoop();
           }
+          
+
+          IckyPicky.arisaFaceImg.onload = function() {
+            IckyPicky.nLoadedImages += 1;
+            IckyPicky.maybeLoop();
+          }
+          if (nResults > 0) {
+            IckyPicky.arisaFaceImg.src = results[0].get('bitmap')._url;
+            IckyPicky.arisaFaceImg.noseXPos = results[0].get('noseXPos');
+            IckyPicky.arisaFaceImg.noseYPos = results[0].get('noseYPos');
+          } else {
+            IckyPicky.arisaFaceImg.src = '/images/arisaface.png';
+            IckyPicky.arisaFaceImg.noseXPos = IckyPicky.noseXOffset;
+            IckyPicky.arisaFaceImg.noseYPos = IckyPicky.noseYOffset;
+          }
+          
+          IckyPicky.jonFaceImg.onload = function() {
+            IckyPicky.nLoadedImages += 1;
+            IckyPicky.maybeLoop();
+          }
+          if (nResults > 1) {
+            IckyPicky.jonFaceImg.src = results[0].get('bitmap')._url;
+            IckyPicky.jonFaceImg.noseXPos = results[0].get('noseXPos');
+            IckyPicky.jonFaceImg.noseYPos = results[0].get('noseYPos');
+          } else {
+            IckyPicky.jonFaceImg.src = '/images/jonface.png';
+            IckyPicky.jonFaceImg.noseXPos = IckyPicky.noseXOffset;
+            IckyPicky.jonFaceImg.noseYPos = IckyPicky.noseYOffset;
+          }
+
+          IckyPicky.elsieFaceImg.onload = function() {
+            IckyPicky.nLoadedImages += 1;
+            IckyPicky.maybeLoop();
+          }
+          if (nResults > 2) {
+            IckyPicky.elsieFaceImg.src = results[0].get('bitmap')._url;
+            IckyPicky.elsieFaceImg.noseXPos = results[0].get('noseXPos');
+            IckyPicky.elsieFaceImg.noseYPos = results[0].get('noseYPos');
+          } else {
+            IckyPicky.elsieFaceImg.src = '/images/elsieface.png';
+            IckyPicky.elsieFaceImg.noseXPos = IckyPicky.noseXOffset;
+            IckyPicky.elsieFaceImg.noseYPos = IckyPicky.noseYOffset;
+          }
+
+          IckyPicky.bingFaceImg.onload = function() {
+            IckyPicky.nLoadedImages += 1;
+            IckyPicky.maybeLoop();
+          }
+          IckyPicky.bingFaceImg.src = '/images/bingface.png';
+          if (nResults > 3) {
+            IckyPicky.bingFaceImg.src = results[0].get('bitmap')._url;
+            IckyPicky.bingFaceImg.noseXPos = results[0].get('noseXPos');
+            IckyPicky.bingFaceImg.noseYPos = results[0].get('noseYPos');
+          } else {
+            IckyPicky.bingFaceImg.src = '/images/bingface.png';
+            IckyPicky.bingFaceImg.noseXPos = IckyPicky.noseXOffset;
+            IckyPicky.bingFaceImg.noseYPos = IckyPicky.noseYOffset;
+          }
+
+          IckyPicky.obamaFaceImg.onload = function() {
+            IckyPicky.nLoadedImages += 1;
+            IckyPicky.maybeLoop();
+          }
+          IckyPicky.obamaFaceImg.src = '/images/obamaface.png';            
+
+      
           // set the initial face for first level
           if (IckyPicky.nDatabaseImages > 0)
           {
@@ -156,44 +221,11 @@ angular
 
       IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
 
-      // load images
-      
       IckyPicky.handImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
         IckyPicky.maybeLoop();
       }
       IckyPicky.handImg.src = '/images/finger.png';
-      
-
-      IckyPicky.arisaFaceImg.onload = function() {
-        IckyPicky.nLoadedImages += 1;
-        IckyPicky.maybeLoop();
-      }
-      IckyPicky.arisaFaceImg.src = '/images/arisaface.png';
-      
-      IckyPicky.jonFaceImg.onload = function() {
-        IckyPicky.nLoadedImages += 1;
-        IckyPicky.maybeLoop();
-      }
-      IckyPicky.jonFaceImg.src = '/images/jonface.png';
-
-      IckyPicky.elsieFaceImg.onload = function() {
-        IckyPicky.nLoadedImages += 1;
-        IckyPicky.maybeLoop();
-      }
-      IckyPicky.elsieFaceImg.src = '/images/elsieface.png';
-
-      IckyPicky.bingFaceImg.onload = function() {
-        IckyPicky.nLoadedImages += 1;
-        IckyPicky.maybeLoop();
-      }
-      IckyPicky.bingFaceImg.src = '/images/bingface.png';
-
-      IckyPicky.obamaFaceImg.onload = function() {
-        IckyPicky.nLoadedImages += 1;
-        IckyPicky.maybeLoop();
-      }
-      IckyPicky.obamaFaceImg.src = '/images/obamaface.png';            
 
       IckyPicky.heartZeroImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
@@ -238,8 +270,6 @@ angular
         IckyPicky.maybeLoop();
       }
       IckyPicky.snotBubbleImg.src = '/images/bubble.png';
-
-      
 
       // listen for clicks
       window.addEventListener('click', function(e) {
