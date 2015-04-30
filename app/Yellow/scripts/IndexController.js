@@ -41,14 +41,15 @@ angular
     ctx:  null,
 
     // variables for the face
+    defaultFaceXPos: 50,
     faceXPos: 50,
     faceYPos: 90,
     faceRate: 1.0,
     faceHeight: 300,
     faceWidth: 200,
     faceRateFlag: 1,
-    noseXOffset: 100,
-    noseYOffset: 150,
+    noseXOffset: 140,
+    noseYOffset: 210,
     noseWidth: 38,
     noseHeight: 44,
 
@@ -323,24 +324,28 @@ angular
           case 1: // moving on to level 2
               if(IckyPicky.score == 1) {
                 IckyPicky.currentFaceImg = IckyPicky.jonFaceImg;
+                IckyPicky.faceXPos = IckyPicky.defaultFaceXPos;
                 IckyPicky.level += 1;
               }
               break;
           case 2: // moving on to level 3
               if(IckyPicky.score == 3) {
                 IckyPicky.currentFaceImg = IckyPicky.elsieFaceImg;
+                IckyPicky.faceXPos = IckyPicky.defaultFaceXPos;
                 IckyPicky.level += 1;
               }
               break;
           case 3:
               if(IckyPicky.score == 15) {
                 IckyPicky.currentFaceImg = IckyPicky.bingFaceImg;
+                IckyPicky.faceXPos = IckyPicky.defaultFaceXPos;
                 IckyPicky.level += 1;
               }
               break;
           case 4:
               if(IckyPicky.score == 20) {
                 IckyPicky.currentFaceImg = IckyPicky.obamaFaceImg;
+                IckyPicky.faceXPos = IckyPicky.defaultFaceXPos;
                 IckyPicky.level += 1;
               }
               break;
