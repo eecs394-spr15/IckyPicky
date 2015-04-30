@@ -558,7 +558,7 @@ angular
       switch (IckyPicky.heart) {
 
         case 2:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.currentFaceImg.noseXPos - 25, IckyPicky.currentFaceImg.noseYPos, 50, 50);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.currentFaceImg.noseXPos - 15, IckyPicky.currentFaceImg.noseYPos + 10, 50, 50);
             break;
         case 1:
             IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.currentFaceImg.noseXPos - 40, IckyPicky.currentFaceImg.noseYPos - 20, 100, 100);
