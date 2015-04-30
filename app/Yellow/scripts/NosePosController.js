@@ -304,7 +304,6 @@ angular
               alert('Failed to create new image, with error code: ' + error.message);
             }
           });
-
         }
 
         
