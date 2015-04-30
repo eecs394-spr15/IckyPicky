@@ -48,7 +48,7 @@ angular
     faceHeight: 300,
     faceWidth: 200,
     faceRateFlag: 1,
-    noseXOffset: 140,
+    noseXOffset: 135,
     noseYOffset: 210,
     noseWidth: 38,
     noseHeight: 44,
@@ -436,6 +436,7 @@ angular
             IckyPicky.Input.tapped = false;
             IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
             IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
+            IckyPicky.faceXPos = IckyPicky.defaultFaceXPos;
             IckyPicky.handImg = IckyPicky.flippyFingerImg;
             if(IckyPicky.faceRateFlag < 0) {
               IckyPicky.faceRate = -1.0;
