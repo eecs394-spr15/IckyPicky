@@ -61,7 +61,7 @@ angular
     fingerWidth: 15,
     fingerHeight: 15,
 
-    nImages: 14,
+    nImages: 13,
     nLoadedImages: 0,
     handImg: new Image,
     arisaFaceImg: new Image,
@@ -71,13 +71,6 @@ angular
     obamaFaceImg: new Image,
     currentFaceImg: new Image,
     noseImg: new Image,
-
-    // BACKEND: this will store the next face image
-    nextFaceImg: new Image,
-    allImages: null,
-    imageIndex: 0,
-    nDatabaseImages: null,
-    nextFaceLoaded: false,
 
     heartZeroImg: new Image,
     heartOneImg: new Image,
@@ -99,7 +92,6 @@ angular
       query.find({
         success: function(results) {
           // Do something with the returned Parse.Object values
-          IckyPicky.allImages = results;
           var nResults = results.length;
 
           IckyPicky.currentFaceImg.onload = function() {
@@ -127,9 +119,9 @@ angular
             IckyPicky.maybeLoop();
           }
           if (nResults > 1) {
-            IckyPicky.jonFaceImg.src = results[0].get('bitmap')._url;
-            IckyPicky.jonFaceImg.noseXPos = results[0].get('noseXPos');
-            IckyPicky.jonFaceImg.noseYPos = results[0].get('noseYPos');
+            IckyPicky.jonFaceImg.src = results[1].get('bitmap')._url;
+            IckyPicky.jonFaceImg.noseXPos = results[1].get('noseXPos');
+            IckyPicky.jonFaceImg.noseYPos = results[1].get('noseYPos');
           } else {
             IckyPicky.jonFaceImg.src = '/images/jonface.png';
             IckyPicky.jonFaceImg.noseXPos = IckyPicky.noseXOffset;
@@ -141,9 +133,9 @@ angular
             IckyPicky.maybeLoop();
           }
           if (nResults > 2) {
-            IckyPicky.elsieFaceImg.src = results[0].get('bitmap')._url;
-            IckyPicky.elsieFaceImg.noseXPos = results[0].get('noseXPos');
-            IckyPicky.elsieFaceImg.noseYPos = results[0].get('noseYPos');
+            IckyPicky.elsieFaceImg.src = results[2].get('bitmap')._url;
+            IckyPicky.elsieFaceImg.noseXPos = results[2].get('noseXPos');
+            IckyPicky.elsieFaceImg.noseYPos = results[2].get('noseYPos');
           } else {
             IckyPicky.elsieFaceImg.src = '/images/elsieface.png';
             IckyPicky.elsieFaceImg.noseXPos = IckyPicky.noseXOffset;
@@ -156,9 +148,9 @@ angular
           }
           IckyPicky.bingFaceImg.src = '/images/bingface.png';
           if (nResults > 3) {
-            IckyPicky.bingFaceImg.src = results[0].get('bitmap')._url;
-            IckyPicky.bingFaceImg.noseXPos = results[0].get('noseXPos');
-            IckyPicky.bingFaceImg.noseYPos = results[0].get('noseYPos');
+            IckyPicky.bingFaceImg.src = results[3].get('bitmap')._url;
+            IckyPicky.bingFaceImg.noseXPos = results[3].get('noseXPos');
+            IckyPicky.bingFaceImg.noseYPos = results[3].get('noseYPos');
           } else {
             IckyPicky.bingFaceImg.src = '/images/bingface.png';
             IckyPicky.bingFaceImg.noseXPos = IckyPicky.noseXOffset;
@@ -169,33 +161,15 @@ angular
             IckyPicky.nLoadedImages += 1;
             IckyPicky.maybeLoop();
           }
-          IckyPicky.obamaFaceImg.src = '/images/obamaface.png';            
-
-      
-          // set the initial face for first level
-          if (IckyPicky.nDatabaseImages > 0)
-          {
-          //console.log(IckyPicky.allImages[0].get('bitmap')._url);
-            IckyPicky.currentFaceImg.src = IckyPicky.allImages[0].get('bitmap')._url;
-            IckyPicky.noseXOffset = IckyPicky.allImages[0].get('noseXPos');
-            console.log(IckyPicky.noseXOffset);
-
-            IckyPicky.noseYOffset = IckyPicky.allImages[0].get('noseYPos');
-            console.log(IckyPicky.noseYOffset);
+          if (nResults > 4) {
+            IckyPicky.obamaFaceImg.src = results[4].get('bitmap')._url;
+            IckyPicky.obamaFaceImg.noseXPos = results[4].get('noseXPos');
+            IckyPicky.obamaFaceImg.noseYPos = results[4].get('noseYPos');
           } else {
-            IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
-          }
-
-          IckyPicky.nextFaceImg.onload = function() {
-            IckyPicky.nextFaceLoaded = true;
-          }
-          if (IckyPicky.nDatabaseImages > 1)
-          {
-            IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap')._url;
-          } else {
-            IckyPicky.nextFaceLoaded = true;
-            IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
-          }
+            IckyPicky.obamaFaceImg.src = '/images/obamaface.png';
+            IckyPicky.obamaFaceImg.noseXPos = IckyPicky.noseXOffset;
+            IckyPicky.obamaFaceImg.noseYPos = IckyPicky.noseYOffset;
+          }  
         },
         error: function(error) {
           alert("Error: " + error.code + " " + error.message);
@@ -220,6 +194,7 @@ angular
       IckyPicky.ctx = IckyPicky.canvas.getContext('2d');
 
       IckyPicky.currentHeartImg = IckyPicky.heartFullImg;
+      IckyPicky.currentFaceImg = IckyPicky.arisaFaceImg;
 
       IckyPicky.handImg.onload = function() {
         IckyPicky.nLoadedImages += 1;
@@ -313,13 +288,13 @@ angular
         IckyPicky.faceRateFlag = IckyPicky.faceRateFlag * -1;
       }
       IckyPicky.faceXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
-      IckyPicky.noseXOffset += IckyPicky.faceRate * IckyPicky.level * 0.5;
+      IckyPicky.currentFaceImg.noseXPos += IckyPicky.faceRate * IckyPicky.level * 0.5;
 
       var nose = {
-        left: IckyPicky.noseXOffset,
-        right: IckyPicky.noseXOffset + IckyPicky.noseWidth,
-        top: IckyPicky.noseYOffset,
-        bottom: IckyPicky.noseYOffset + IckyPicky.noseHeight
+        left: IckyPicky.currentFaceImg.noseXPos,
+        right: IckyPicky.currentFaceImg.noseXPos + IckyPicky.noseWidth,
+        top: IckyPicky.currentFaceImg.noseYPos,
+        bottom: IckyPicky.currentFaceImg.noseYPos + IckyPicky.noseHeight
       };
       
       var finger = {
@@ -335,65 +310,32 @@ angular
 
         switch(IckyPicky.level) {
           case 1: // moving on to level 2
-              if(IckyPicky.score == 5 && IckyPicky.nextFaceLoaded) {
-                IckyPicky.currentFaceImg = IckyPicky.nextFaceImg;
-                IckyPicky.nextFaceLoaded = false;
-                if (IckyPicky.nDatabaseImages > 2)
-                {
-                  IckyPicky.nextFaceImg.src = IckyPicky.allImages[1].get('bitmap')._url; 
-                } else {
-                  IckyPicky.nextFaceImg = IckyPicky.jonFaceImg;
-                }
+              if(IckyPicky.score == 1) {
+                IckyPicky.currentFaceImg = IckyPicky.jonFaceImg;
                 IckyPicky.level += 1;
-                // BACKEND: here start loading the next image
-                // on your list of objects you got from parse
-                // nextFaceImg.src = bitmap from parse
-                //
-                // get the next one and increment the counter
-
               }
               break;
           case 2: // moving on to level 3
-              if(IckyPicky.score == 10 && IckyPicky.nextFaceLoaded) {
+              if(IckyPicky.score == 3) {
                 IckyPicky.currentFaceImg = IckyPicky.elsieFaceImg;
                 IckyPicky.level += 1;
-                // BACKEND: here start loading the next image
-                // on your list of objects you got from parse
-                // nextFaceImg.src = bitmap from parse
-                //
-                // get the next one and increment the counter
               }
               break;
           case 3:
-              if(IckyPicky.score == 15 && IckyPicky.nextFaceLoaded) {
+              if(IckyPicky.score == 15) {
                 IckyPicky.currentFaceImg = IckyPicky.bingFaceImg;
                 IckyPicky.level += 1;
-                // BACKEND: here start loading the next image
-                // on your list of objects you got from parse
-                // nextFaceImg.src = bitmap from parse
-                //
-                // get the next one and increment the counter
               }
               break;
           case 4:
-              if(IckyPicky.score == 20 && IckyPicky.nextFaceLoaded) {
+              if(IckyPicky.score == 20) {
                 IckyPicky.currentFaceImg = IckyPicky.obamaFaceImg;
                 IckyPicky.level += 1;
-                // BACKEND: here start loading the next image
-                // on your list of objects you got from parse
-                // nextFaceImg.src = bitmap from parse
-                //
-                // get the next one and increment the counter
               }
               break;
           case 5:
-              if(IckyPicky.score == 25 && IckyPicky.nextFaceLoaded) {
+              if(IckyPicky.score == 25) {
                 IckyPicky.level += 1;
-                // BACKEND: here start loading the next image
-                // on your list of objects you got from parse
-                // nextFaceImg.src = bitmap from parse
-                //
-                // get the next one and increment the counter
               }
               break;
         }
@@ -518,8 +460,8 @@ angular
       IckyPicky.ctx.drawImage(IckyPicky.currentFaceImg, IckyPicky.faceXPos, IckyPicky.faceYPos, IckyPicky.faceWidth, IckyPicky.faceHeight);
       
       IckyPicky.ctx.drawImage(IckyPicky.noseImg,
-                              IckyPicky.noseXOffset,
-                              IckyPicky.noseYOffset,
+                              IckyPicky.currentFaceImg.noseXPos,
+                              IckyPicky.currentFaceImg.noseYPos,
                               IckyPicky.noseWidth,
                               IckyPicky.noseHeight);
       
@@ -535,13 +477,13 @@ angular
       switch (IckyPicky.heart) {
 
         case 2:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.noseXOffset - 25, IckyPicky.noseYOffset - 5, 50, 50);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.currentFaceImg.noseXPos - 25, IckyPicky.currentFaceImg.noseYPos, 50, 50);
             break;
         case 1:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.noseXOffset - 40, IckyPicky.noseYOffset - 20, 100, 100);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.currentFaceImg.noseXPos - 40, IckyPicky.currentFaceImg.noseYPos - 20, 100, 100);
             break;
         case 0:
-            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.noseXOffset - 65, IckyPicky.noseYOffset - 35, 150, 150);
+            IckyPicky.ctx.drawImage(IckyPicky.snotBubbleImg, IckyPicky.currentFaceImg.noseXPos - 65, IckyPicky.currentFaceImg.noseYPos - 35, 150, 150);
             break;
       
       }
